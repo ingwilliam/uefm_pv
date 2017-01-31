@@ -1,0 +1,692 @@
+body{
+    font-family: Verdana, Arial, Helvetica;
+    font-size: 12px;
+    margin: 0;
+    color: #414042;
+    background-attachment: fixed;
+    background-image: url("../images/fondoW.png");
+    background-position: center;
+    background-repeat: no-repeat;    
+    background-color: #0F2E58;
+}
+
+input[type=text]{
+    border: 1px solid #000000;
+    height: 17px;
+}
+
+select{
+    border: 1px solid #000000;
+    height: 20px;
+}
+
+a img{
+    border: none;    
+}
+
+textarea{
+    border: 1px solid #000000;
+}
+
+#tablaContacto{
+    width: 480px;
+    margin: 20px auto;
+}
+
+.tituloContacto{
+    font-weight: bold;
+    text-align: right;
+}
+
+.tituloContacto em{
+    color: red;
+    font-weight: bold;
+}
+
+h2{
+    color: #00813D;
+}
+
+h3{
+    color: #00813D;
+    margin: 7px 0 7px 0;
+}
+
+.enviarContacto{
+    background-color: #C74A1C;
+    border: 1px solid #000000;
+    color: #ffffff;
+    padding: 2px 15px;
+    font-weight: bold;
+}
+
+
+#pagina{
+    width: 980px;
+    margin: 0 auto;
+}
+
+#cabecera{
+    width: 100%;
+    height: 164px;    
+    background: url(../images/fondo_r1_c1_s1.png)  no-repeat;
+}
+
+#logo{
+    border: 0 none;
+    margin: 20px 0 0 14px;
+    position: absolute;
+    z-index: 100;
+}
+
+#formBusqueda{
+    float: right;
+}
+
+#botonBuscar{
+    background: url(../images/ColegioInterfazCorte2_r2_c16.png)  no-repeat;
+    width: 19px;
+    height: 19px;
+    border: none;
+}
+
+.menuRedesSociales{
+    clear: both;
+    color: #FFFFFF;
+    float: right;
+    list-style: none outside none;
+    margin: 5px 0 0 0;
+    padding: 0;
+    width: 100%;
+}
+
+.menuRedesSociales li{
+    float: right;
+    margin: 0 0 0 4px;
+}
+
+.menuRedesSociales li a img{
+    border: none;
+}
+
+#menu{
+    float: right;
+    width: 100%;
+    height: 28px;
+}
+
+#menu ul{
+    clear: both;
+    color: #FFFFFF;
+    float: right;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0 33px 0 0;
+    width: 100%;
+    height: 28px;
+}
+
+#menu ul li {
+    border-left: 1px solid #FFFFFF;
+    float: right;
+    padding: 6px 16px 0 16px;
+    height: 22px;
+}
+
+#menu ul li a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+#menu ul li a img{
+    border: none;
+}
+
+.inputBuscar{
+    border: 1px solid #000000;
+    height: 17px;
+}
+
+#buscador{
+    width: 230px;
+    padding: 50px 50px 0 700px;
+    text-align: right;
+    height: 86px;
+}
+
+#bannerHome{
+    background: url(../images/fondo_r3_c1_s1.png)  repeat-y;
+    width: 954px;
+    height: 277px;
+    padding: 0 13px 0 13px;
+}
+
+.tableSubMenu1{
+    background: url(../images/ColegioInterfazCorteFW_r5_c5.png)  no-repeat;
+    width: 134px;
+    height: 127px;
+}
+.tableSubMenu2{
+    background: url(../images/ColegioInterfazCorteFW_r5_c10.png)  no-repeat;
+    width: 134px;
+    height: 127px;
+}
+.tableSubMenu3{
+    background: url(../images/ColegioInterfazCorteFW_r5_c12.png)  no-repeat;
+    width: 134px;
+    height: 127px;
+}
+.tableSubMenu4{
+    background: url(../images/ColegioInterfazCorteFW_r5_c14.png)  no-repeat;
+    width: 134px;
+    height: 127px;
+}
+.tableSubMenu5{
+    background: url(../images/ColegioInterfazCorteFW_r5_c20.png)  no-repeat;
+    width: 134px;
+    height: 127px;
+}
+
+.tituloSubMenu{
+    width: 134px;
+    height: 24px;
+}
+
+.tituloSubMenu td{
+    color: #ffffff;
+    text-align: center;
+    font-size: 11px;
+}
+
+.tituloSubMenu td a{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.cuerposSubMenu{
+    width: 134px;
+    height: 103px;
+}
+
+.cuerposSubMenu td{
+    text-align: center;
+}
+
+#contenidoHome{
+    background: url(../images/fondo_r3_c1_s1.png)  repeat-y;
+    width: 840px;    
+    padding: 0 70px 0 70px;
+}
+
+#contenidoHomeIzq{
+    float: left;
+    margin-right: 30px;
+}
+
+#contenidoHomeIzqInterna{
+    float: left;
+    margin-right: 30px;
+    width: 589px;
+}
+
+#contenidoHomeIzqInterna p{
+    text-align: justify;
+}
+
+#contenidoContacto{
+    float: left;
+    margin-right: 15px;
+    padding-right: 12px;
+    width: 485px;
+    border-right: 1px solid #B30075;
+}
+
+#contenidoHomeDer{
+    float: left;
+}
+
+#contenidoHomeDerCon{
+    float: left;
+}
+
+.titulo1{
+    margin: 0;
+    color: #b30075;
+    width: 100%;
+}
+
+.vermas1{
+    font-weight: bold;
+    text-decoration: none;
+    color: #b30075;   
+}
+
+.vermas1 img{
+    border: none;
+}
+
+
+.titulo2{
+    margin: 0;
+    color: #00813d;
+    width: 100%;
+}
+
+.vermas2{
+    font-weight: bold;
+    text-decoration: none;
+    color: #00813d;   
+}
+
+.vermas2 img{
+    border: none;
+}
+
+.titulo3{
+    margin: 0;
+    color: #c74a1c;
+    width: 100%;
+}
+
+.vermas3{
+    font-weight: bold;
+    text-decoration: none;
+    color: #c74a1c;   
+}
+
+.vermas3 img{
+    border: none;
+}
+
+.bloqueA{
+    height: 160px;
+}
+
+.bloqueB{
+    float: left;
+    width: 137px;
+    margin: 0 20px 0 0;
+    
+}
+
+.bloqueC{
+    float: left;
+    width: 432px
+}
+
+.bloqueC p{
+    text-align: justify;
+    margin-bottom: 0;
+    height: 80px;
+}
+
+.bloqueC hr {
+  background: url(../images/ColegioInterfazCorteFW_r13_c9.png) no-repeat;
+  height: 6px;
+  border: none;
+}
+
+.alinearDer{
+    text-align: right;
+}
+
+#loginPagina{
+    width: 221px;
+}
+
+#cabeceraLogin{
+    width: 221px;
+    height: 41px;
+    background: url(../images/marcoParaEventos_r1_c1_s1.png)  no-repeat;   
+    text-align: center;
+    color: #ffffff;
+    font-size: 16px;
+    
+}
+
+#cuerpoLogin{
+    width: 221px;
+    background: url(../images/marcoParaEventos_r3_c1_s1.png)  repeat-y;   
+}
+
+#pieLogin{
+    width: 221px;
+    height: 22px;
+    background: url(../images/marcoParaEventos_r5_c1_s1.png)  no-repeat;   
+    
+}
+
+.inputLogin{
+    border: 1px solid #000000;
+    height: 17px;
+    width: 120px;
+}
+
+#tablaLogin{
+    
+    width: 180px;
+    margin: 0 auto;
+}
+
+#eventosPagina{
+    width: 221px;
+}
+
+#cabeceraEventos{
+    text-align: center;
+    color: #ffffff;
+    font-size: 16px;
+    width: 221px;
+    height: 39px;
+    background: url(../images/marcoParaEnlaces_r1_c1_s1.png)  no-repeat;   
+}
+
+#cuerpoEventos{
+    width: 221px;
+    background: url(../images/marcoParaEnlaces_r3_c1_s1.png)  repeat-y;  
+}
+
+#cuerpoEventos ul{
+    list-style-image: url("../images/ColegioInterfazCorte2_r10_c9.png");
+    margin: 0;
+    padding-left: 30px;
+    font-size: 10px;
+    width: 170px;
+}
+
+#cuerpoEventos ul li{
+    text-align: justify;
+}
+
+#cuerpoEventos ul li a{
+    color: #414042;
+    text-decoration: none;   
+}
+
+
+
+#pieEventos{
+    width: 221px;
+    height: 23px;
+    background: url(../images/marcoParaEnlaces_r5_c1_s1.png)  no-repeat;   
+}
+
+#piePagina{
+    background: url(../images/fondo_r5_c1_s1.png)  no-repeat;   
+    height: 46px;
+    width: 100%;
+}
+
+.contenidoCuerpo{
+    padding-top: 20px !important;
+}
+
+
+div.pagination {
+	padding:3px;
+	margin:3px;
+	text-align:center;
+}
+
+div.pagination a {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #2C2C2C;
+	text-decoration: none;
+	color: #fff;
+	background: #2C2C2C url(../images/image1.gif);
+}
+
+div.pagination a:hover, div.pagination a:active {
+	border:1px solid #AAD83E;
+	color: #FFF;
+	background: #AAD83E url(../images/image2.gif);
+}
+
+div.pagination span.current {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #AAD83E;
+  font-weight: bold;
+	background: #AAD83E url(../images/image2.gif);
+	color: #FFF;
+}
+
+div.pagination span.disabled {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #f3f3f3;
+	color: #ccc;
+}
+
+#tituloDetalle{
+    font-style: italic;
+    color: #00813D;
+    margin: 0 0 30px 0;
+    border-bottom: 2px solid #00813D;
+    font-size: 20px;
+}
+
+#tituloDetalle em{
+    color: #000000;
+}
+
+#tituloDetalleInterna{
+    font-style: italic;
+    color: #00813D;
+    border-bottom: 2px solid #00813D;
+    font-size: 16px;
+}
+
+#comparteRedes{
+    width: 201px;
+    padding: 10px 10px;
+    height: 70px;
+}
+
+.twitter-share-button{
+    margin-right: 7px;
+}
+
+#galeriaInterna{
+    width: 221px;
+}
+
+table.tablacalendario {
+    background-color: #F9F9F9;    
+    border-collapse:  collapse;
+    clear: none;
+    font-size: 1em;
+    margin: 0 auto;
+    width: 300px;
+    border: #cccccc solid 1px;
+}
+table.tablacalendario td {
+    padding: 5px;
+    text-align: center;
+}
+table.tablacalendario abbr {
+    border-bottom: medium none;
+}
+
+td.tit{
+    background-color: #EEF6FF;
+    color: #666666;
+}
+
+.diasemana {
+    border-bottom: 1px solid #CCCCCC;
+    color: #666666;
+    font-weight: bold;
+}
+
+.finSemana{
+    background-color: #EEEEEE;
+    color: #739AC4;
+    font-weight: bold;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.diavalido{
+    color: #739AC4;
+    font-weight: bold;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.titmesano{
+    
+    color: #00813D;
+    font-weight: bold;
+}
+
+
+
+.tableEventos {
+    padding: 0;
+    margin: 0 auto;
+    border-collapse: collapse;
+    color: #333;
+    background: #F3F5F7;
+    width: 100%;
+    font-size: 85%;
+}
+
+.tableEventos a {
+    color: #3A4856;
+    text-decoration: none;
+    border-bottom: 1px solid #C6C8CB;
+}  
+
+.tableEventos a:visited {
+    color: #777;
+}
+
+.tableEventos a:hover {
+    color: #000;
+}  
+
+.tableEventos thead th {
+    background: #3A4856;
+    padding: 15px 10px;
+    color: #fff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.tableEventos tbody, table thead {
+    border-left: 1px solid #EAECEE;
+    border-right: 1px solid #EAECEE;
+}
+
+.tableEventos tbody {
+    border-bottom: 1px solid #EAECEE;
+}
+
+.tableEventos tbody td, .tableEventos tbody th {
+    padding: 10px;
+    background: url("../images/td_back.gif") repeat-x;
+    text-align: left;
+}
+
+.tableEventos tbody tr {
+    background: #F3F5F7;
+}
+
+.tableEventos tbody tr.odd {
+    background: #F0F2F4;
+}
+
+.tableEventos tbody  tr:hover {
+    background: #EAECEE; color: #111;
+}
+
+.eventoActivo a{
+    background-color: #739AC4;
+    color: #FFFFFF;
+    display: block;
+    padding: 3px 0;
+    text-decoration: underline;
+}
+
+.eventoActivo a:hover{
+    text-decoration: underline;
+    color:#fff;
+    background-color:#14477E ;
+}
+.buscarEvento{
+    font-size: 11px;
+    border: #000000 solid 1px;
+}
+.contenidoGaleriaEvento{
+    padding-top: 20px !important;
+    padding-left: 12px !important;
+    padding-right: 0 !important;
+    width: 955px !important;
+}
+
+#contenedorGaleria{
+    width: 850px;
+    margin: 0 auto;
+}
+
+.play{
+    background: url('../images/playgaleria.png') no-repeat;
+    height: 32px;
+}
+
+.pause{
+    background: url('../images/pausaGaleria.png') no-repeat;
+    height: 32px;
+}
+
+.next{
+    background: url('../images/siguiente.png') no-repeat;
+    height: 32px;
+}
+
+.prev{
+    background: url('../images/anterior.png') no-repeat;
+    height: 32px;
+}
+
+.albunes{
+    background-color: #F9F9F9;
+    border: 1px solid #CCCCCC;
+    border-collapse: collapse;
+    clear: none;
+    font-size: 1em;
+    height: 220px;
+    width: 180px;
+    float: left;
+    margin: 5px;
+    text-align: center;
+}
+
+.albunes div{
+    height: 147px;
+    width: 138px;
+    margin: 0 auto 5px auto;
+}
+
+.tituloGaleria1{
+    margin: 7px auto;
+    text-align: center;
+    color: #B30075;
+    height: 30px;
+}
+
+.tituloGaleria2{
+    margin: 7px auto;
+    text-align: center;
+    color: #00813D;
+    height: 30px;
+}
+
+.tituloGaleria3{
+    margin: 7px auto;
+    text-align: center;
+    color: #C74A1C;
+    height: 30px;
+}

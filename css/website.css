@@ -1,0 +1,57 @@
+
+#ulSubMenuHome{ margin: 0; padding: 0; }
+
+
+
+
+.buttons { background:url("../images/design/buttons.png") no-repeat scroll 0 0 transparent; }
+
+#subBannerHome {
+    height: 127px;
+    overflow:hidden;
+    position: relative;
+    padding: 0 0 10px;
+    background: url(../images/fondo_r3_c1_s1.png)  repeat-y;   
+    width: 954px;
+    padding: 15px 13px 15px 13px;
+}
+#subBannerHome .viewport {
+    float: left;
+    width: 840px;
+    height: 127px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 16px 0 20px;
+}
+#subBannerHome .buttons {
+    display: block;
+    background-position: 0 -38px;
+    text-indent: -999em;
+    float: left;
+    width: 39px;
+    height: 37px;
+    overflow: hidden;
+    position: relative;
+    margin:  45px 0 0 0 ;
+}
+#subBannerHome .next {
+    background-position: 0 0;
+}
+#subBannerHome .disable { 
+    visibility: hidden;
+}
+#subBannerHome .overview { 
+    list-style: none;
+    position: absolute;
+    width: 240px;
+    left: 0 ;
+    top: 0;
+        height: 127px;
+}
+#subBannerHome .overview li{
+    float: left;
+    margin: 0 40px 0 0;
+    padding: 1px;
+    width: 134px;
+    height: 127px;
+}
