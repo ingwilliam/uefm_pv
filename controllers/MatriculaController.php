@@ -26,6 +26,7 @@ class MatriculaController {
         $data['arrayLogo'] = $indexModel->arrayLogo();           
         $data['articuloMenu'] = $indexModel->articuloMenu();   
         $data['tipoDocumento'] = $matriculaModel->listArraySql("SELECT * FROM tipo_documento WHERE activo = true");   
+        $data['formXhtml'] = new Xhtml();
         
         //Finalmente presentamos nuestra plantilla
         $this->view->show("matricula.php", $data);

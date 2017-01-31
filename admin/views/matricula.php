@@ -632,7 +632,7 @@ $titulo = "Matricula";
                                                         <div class="form-group">
                                                             <label class="col-sm-2 control-label" for="tipo_documento">Tipo</label>
                                                             <div class="col-sm-10">
-                                                                <?php $vars["formXhtml"]->select("tipo", "tipo", $vars["arrayRegistroDocumento"]["tipo"], "validar form-control", "Tipo", "", "", "", "", "", "", "", array("Contrato" => "Contrato", "Foto" => "Foto", "Hoja de Vida" => "Hoja de Vida")); ?>
+                                                                <?php $vars["formXhtml"]->select("tipo", "tipo", $vars["arrayRegistroDocumento"]["tipo"], "validar form-control", "Tipo", "", "", "", "", "", "", "", array("Acta de Grado" => "Acta de Grado","Afiliación AFP" => "Afiliaci&oacute;n AFP","Afiliaci&oacute;n ARL" => "Afiliaci&oacute;n ARL","Afiliaci&oacute;n EPS" => "Afiliaci&oacute;n EPS","Certificado Medico" => "Certificado Medico","Contrato" => "Contrato","Diploma" => "Diploma","Escalafon" => "Escalafon", "Foto" => "Foto", "Hoja de Vida" => "Hoja de Vida")); ?>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">

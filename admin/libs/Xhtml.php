@@ -180,12 +180,12 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
                 <option value="<?php echo $clave; ?>" <?php echo $check; ?>>
                     <?php
                     if ($table != "") {
-                        echo utf8_encode($valor[$muestra]);
+                        echo $valor[$muestra];
                         if ($extra != "") {
-                            echo " - " . utf8_encode($valor[$extra]);
+                            echo " - " . $valor[$extra];
                         }
                     } else {
-                        echo utf8_encode($valor);
+                        echo $valor;
                     }
                     ?>
                 </option>
@@ -269,9 +269,9 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
                     <?php
                     if ($table != "") {
                         if ($extra != "") {
-                            echo utf8_encode($valor[$muestra] . " - " . $valor["extra"]);
+                            echo $valor[$muestra] . " - " . $valor["extra"];
                         } else {
-                            echo utf8_encode($valor[$muestra]);
+                            echo $valor[$muestra];
                         }
                     } else {
                         echo $valor;
