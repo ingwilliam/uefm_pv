@@ -10,6 +10,8 @@ class FrontController {
         require 'libs/View.php'; //Mini motor de plantillas
         require 'admin/libs/PHPPaging.php'; //Paginador
         require 'admin/libs/Xhtml.php'; //Paginador
+        require 'admin/libs/Resources.php'; //Recursos del sistema
+                
 
         require 'config.php'; //Archivo con configuraciones.
         //Con el objetivo de no repetir nombre de clases, nuestros controladores

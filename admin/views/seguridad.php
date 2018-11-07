@@ -27,7 +27,10 @@ $titulo = "Seguridad";
             </aside>
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
+                <!-- Content Header (Page header) -->                
+                <?php
+                if (count($vars["arrayPermiso"]) > 0) {
+                ?>
                 <section class="content-header">
                     <h1>
                         Seguridad
@@ -39,7 +42,6 @@ $titulo = "Seguridad";
                         <li class="active">Seguridad del sistema</li>
                     </ol>
                 </section>
-
                 <!-- Main content -->
                 <section class="content">
                     <?php
@@ -139,6 +141,18 @@ $titulo = "Seguridad";
                         </form>
                     </div>
                 </section>
+                <?php
+                } else {
+                    ?>
+                    <br/>
+                    <div class="alert alert-info alert-dismissible">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        <h4><i class="icon fa fa-info"></i> No tienen permisos para ingresar a este modulo!</h4>
+                        Comunicarse con el administrador del sistema
+                    </div>
+                    <?php
+                }
+                ?>
                 <!-- /.content -->
             </div>
             <!-- /.content-wrapper -->

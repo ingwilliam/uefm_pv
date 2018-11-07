@@ -42,7 +42,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" align="right"><br/>
-                                    <input type="submit" value="Enviar" class="enviarContacto" />                                        
+                                    <input type="submit" value="Enviar" />                                        
                                 </td>
                             </tr>
                         </table>                                                 

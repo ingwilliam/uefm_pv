@@ -92,7 +92,7 @@ class ModuloController extends ControllerBase {
 
         //Cramos el paginador
         $paginador = new PHPPaging($modulo->thisdb());
-        $paginador->param = "&controlador=Usuario&accion=usuario".$parametros_busqueda;
+        $paginador->param = "&controlador=Modulo&accion=modulo".$parametros_busqueda;
         $paginador->rowCount($sql);
         $paginador->config(3, 10);
         

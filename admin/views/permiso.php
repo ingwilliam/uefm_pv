@@ -39,7 +39,7 @@ $titulo = "Permiso";
                     <ol class="breadcrumb">
                         <li><a href="index.php?controlador=Index&accion=index"><i class="fa fa-home"></i> Inicio</a></li>
                         <li>Seguridad</li>
-                        <li class="active">Permisoes del sistema</li>
+                        <li class="active">Permisos del sistema</li>
                     </ol>
                 </section>
 

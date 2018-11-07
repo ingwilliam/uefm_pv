@@ -37,7 +37,7 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
      * @param $mensaje = valor que se muestra de mensaje de alerta
      */
     public function alert($mensaje) {
-        echo "<script type=\"text/javascript\">alert(\"" . $mensaje . "\");</script> ";
+        echo "<script type=\"text/javascript\">alert(\"" . utf8_decode($mensaje) . "\");</script> ";
         return true;
     }
 
@@ -146,7 +146,7 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
         }
     }
 
-    public function radio($id, $name, $value, $class, $title, $style = "", $arrayradio = array()) {
+    public function radio($id, $name, $value, $class, $title, $style = "", $arrayradio = array(),$disable="") {
 
         foreach ($arrayradio as $clave => $valor) {
             if ($clave == $value)
@@ -154,9 +154,8 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
             else
                 $check = "";
             ?>
-            <input type="radio" id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" title="<?php echo $title; ?>" style="<?php echo $style; ?>" value="<?php echo $clave; ?>" <?php echo $check; ?> /><?php echo $valor; ?> &nbsp;
-            <?php
-            $class = "";
+            <input type="radio" id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" title="<?php echo $title; ?>" style="<?php echo $style; ?>" value="<?php echo $clave; ?>" <?php echo $check; ?> <?php echo $disable; ?> /><?php echo $valor; ?> &nbsp;
+            <?php            
         }
     }
 
@@ -164,7 +163,25 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
 
         if ($table != "") {
 
-            $arrayselect = $this->listArray($table, $key, $where, $orderby);
+            if ($table == "plan_estudio") {
+                $sql="SELECT
+                        pe.id,
+                        pe.anio, 
+                        a.nombre as asignatura,
+                        c.nombre as curso,
+                        c.orden
+                      FROM plan_estudio AS pe
+                      INNER JOIN asignatura AS a ON pe.asignatura = a.id
+                      INNER JOIN plan_estudio_curso AS pec ON pe.id = pec.plan_estudio
+                      INNER JOIN curso AS c ON pec.curso = c.id
+                      ORDER BY 2,3,5
+                      ";
+                $arrayselect = $this->listArraySql($sql, "id");
+            }
+            else
+            {
+                $arrayselect = $this->listArray($table, $key, $where, $orderby);
+            }                        
         }
         ?>
         <select id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" title="<?php echo $title; ?>" style="<?php echo $style; ?>" size="1" dir="<?php echo $dir; ?>" <?php echo $disable; ?> >
@@ -172,18 +189,34 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
             <?php
             $check = "";
             foreach ($arrayselect as $clave => $valor) {
-                if ($clave == $value)
-                    $check = "selected=\"selected\"";
+                if(is_array($value))
+                {
+                    if (in_array($clave, $value))
+                        $check = "selected=\"selected\"";
+                    else
+                        $check = "";                       
+                }
                 else
-                    $check = "";
+                {
+                    if ($clave == $value)
+                        $check = "selected=\"selected\"";
+                    else
+                        $check = "";   
+                }                                
                 ?>
                 <option value="<?php echo $clave; ?>" <?php echo $check; ?>>
                     <?php
                     if ($table != "") {
-                        echo $valor[$muestra];
-                        if ($extra != "") {
-                            echo " - " . $valor[$extra];
+                        if ($table == "plan_estudio") {
+                            echo $valor["anio"]."-".$valor["asignatura"]."-".$valor["curso"];
                         }
+                        else
+                        {
+                            echo $valor[$muestra];
+                            if ($extra != "") {
+                                echo " - " . $valor[$extra];
+                            }
+                        }                        
                     } else {
                         echo $valor;
                     }
@@ -284,6 +317,41 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
         </select>
         <?php
     }
+    
+    public function selectExtraDirector($id, $name, $value, $class, $title, $style = "", $table = "", $key = "", $muestra = "", $extra = "", $where = "1", $orderby = "", $arrayselect = array(), $dir = "", $textoSelect = ":: Seleccione ::", $disable = "", $tableextra = "") {
+
+        if ($table != "") {
+
+            $sql = "SELECT $table.* , $tableextra.$extra as extra FROM $table LEFT JOIN $tableextra ON $table.id=$tableextra.usuario WHERE $where ORDER BY $orderby";
+
+            $arrayselect = $this->listArraySql($sql, $key);
+        }
+        ?>
+        <select id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" title="<?php echo $title; ?>" style="<?php echo $style; ?>" size="1" dir="<?php echo $dir; ?>" <?php echo $disable; ?> >
+            <option value=""><?php echo $textoSelect; ?></option>
+            <?php
+            $check = "";
+            foreach ($arrayselect as $clave => $valor) {
+                if ($clave == $value)
+                    $check = "selected=\"selected\"";
+                else
+                    $check = "";
+                ?>
+                <option value="<?php echo $clave; ?>" <?php echo $check; ?>>
+                    <?php
+                    if ($table != "") {
+                            echo $valor["primer_nombre"] . " " . $valor["segundo_nombre"] . " " . $valor["primer_apellido"] . " " . $valor["segundo_apellido"];                        
+                    } else {
+                        echo $valor;
+                    }
+                    ?>
+                </option>
+                <?php
+            }
+            ?>
+        </select>
+        <?php
+    }
 
     public function selectConcatena($id, $name, $value, $class, $title, $style = "", $table = "", $key = "", $arrayMuestra = array(), $where = "1", $orderby = "", $arrayselect = array(), $dir = "", $textoSelect = ":: Seleccione ::") {
 
@@ -333,13 +401,15 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
             $sql = "select $table.* from $table where $table.$key not in (select $table.$key from $tableunion where $tableunion.$key = $table.$key) AND " . $where . " ORDER BY $table.idBono ASC";
 
             $arrayCheck = $this->listArraySql($sql, $key);
-        }
-        ?>
-        <br/>
+        /*    
+            <br/>
         Buscador: <input type="text" id="textCheckBuscador<?php echo $table; ?>" />
         <br/><br/>
         <input type="hidden" id="controladorCheckBuscador" value="<?php echo $controlador; ?>" />
         <input type="hidden" id="accionCheckBuscador" value="<?php echo $accion; ?>" />
+         */
+        }
+        ?>
         <div id="divCheckBuscador<?php echo $table; ?>" class="divCheckBuscador">
             <?php
             foreach ($arrayCheck as $clave => $valor) {

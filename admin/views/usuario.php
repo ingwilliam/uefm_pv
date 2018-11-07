@@ -128,7 +128,7 @@ $titulo = "Usuario";
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label" for="numero_documento">Numero de documento</label>
                                                     <div class="col-sm-10">
-                                                        <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control", "Numero de documento"); ?>
+                                                        <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control numeric", "Numero de documento"); ?>
                                                     </div>
                                                 </div>
 
@@ -363,7 +363,7 @@ $titulo = "Usuario";
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label" for="numero_documento">Numero de documento</label>
                                                 <div class="col-sm-10">
-                                                    <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control", "Numero de documento"); ?>
+                                                    <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control numeric", "Numero de documento"); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -376,6 +376,12 @@ $titulo = "Usuario";
                                                 <label class="col-sm-2 control-label" for="primer_apellido">Primer apellido</label>
                                                 <div class="col-sm-10">
                                                     <?php $vars["formXhtml"]->inputtext("text", "primer_apellido", "primer_apellido", $vars["arrayRegistro"]["primer_apellido"], "validar form-control", "Primer apellido"); ?>
+                                                </div>                                            
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="perfil">Perfil</label>
+                                                <div class="col-sm-10">
+                                                    <?php $vars["formXhtml"]->select("perfil", "perfil", $vars["arrayRegistro"]["perfil"], "validar form-control", "Perfil", "", "perfil", "id", "nombre", "", "1", " nombre ASC"); ?>                                                
                                                 </div>                                            
                                             </div>
                                         </div>

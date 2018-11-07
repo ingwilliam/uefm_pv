@@ -40,7 +40,7 @@ class PerfilController extends ControllerBase {
                     $checked = 'checked="checked"';
             ?>
             <div class="divItemCheck">
-                <input <?php echo $checked; ?> onclick="checkBuscadorPerfil(this)" type="checkbox" name="arrayCheckBuscador<?php echo $this->table; ?>[]" value="<?php echo $valor[$this->idTable]; ?>"/> <?php echo $valor["nombre"]; ?>
+                <input <?php echo $checked; ?> type="checkbox" name="arrayCheckBuscador<?php echo $this->table; ?>[]" value="<?php echo $valor[$this->id]; ?>"/> <?php echo $valor["nombre"]; ?>
             </div>            
             <?php
         }

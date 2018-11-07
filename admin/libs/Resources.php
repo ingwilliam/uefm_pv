@@ -238,7 +238,6 @@ class Resources {
         $text = str_replace('\\', '', $text);
         $text = str_replace(']', '', $text);
         $text = str_replace('^', '', $text);
-        $text = str_replace('_', '', $text);
         $text = str_replace('`', '', $text);
         $text = str_replace('{', '', $text);
         $text = str_replace('|', '', $text);
@@ -250,7 +249,7 @@ class Resources {
     
     public static function anio() {
         $ini_year =1993;
-        $year_fin=date('Y');
+        $year_fin=date('Y')+1;
         $c=0;
         for($i=$ini_year; $i<=$year_fin; $i++) { $anio[$i]=$i; $c++; }
 

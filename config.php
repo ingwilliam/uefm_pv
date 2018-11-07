@@ -7,7 +7,7 @@ $config->set('modelsFolder', 'models/');
 $config->set('viewsFolder', 'views/');
 
 $config->set('dbhost', 'localhost');
-$config->set('dbname', 'uefmcolegio');
+$config->set('dbname', 'uefmcolegioweb');
 $config->set('dbuser', 'root');
 $config->set('dbpass', 'ingwilliam10');
 

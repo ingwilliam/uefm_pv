@@ -27,6 +27,9 @@ $titulo = "Modulo";
             </aside>
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
+                <?php
+                if (count($vars["arrayPermiso"]) > 0) {
+                ?>
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
@@ -36,7 +39,7 @@ $titulo = "Modulo";
                     <ol class="breadcrumb">
                         <li><a href="index.php?controlador=Index&accion=index"><i class="fa fa-home"></i> Inicio</a></li>
                         <li>Seguridad</li>
-                        <li class="active">Moduloes del sistema</li>
+                        <li class="active">Modulos del sistema</li>
                     </ol>
                 </section>
 
@@ -230,6 +233,20 @@ $titulo = "Modulo";
                     ?>
                 </section>
                 <!-- /.content -->
+                
+                <?php
+                } else {
+                    ?>
+                    <br/>
+                    <div class="alert alert-info alert-dismissible">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        <h4><i class="icon fa fa-info"></i> No tienen permisos para ingresar a este modulo!</h4>
+                        Comunicarse con el administrador del sistema
+                    </div>
+                    <?php
+                }
+                ?>
+                
             </div>
             <!-- /.content-wrapper -->
             <footer class="main-footer">

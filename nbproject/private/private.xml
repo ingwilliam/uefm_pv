@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/var/www/html/uefm/include/contenidohomeder.php</file>
-            <file>file:/var/www/html/uefm/jquery/codigo.js</file>
-            <file>file:/var/www/html/uefm/views/matricula.php</file>
-            <file>file:/var/www/html/uefm/controllers/MatriculaController.php</file>
-            <file>file:/var/www/html/uefm/include/headcontacto.php</file>
-            <file>file:/var/www/html/uefm/css/alertas.css</file>
-            <file>file:/var/www/html/uefm/index_registro.php</file>
-            <file>file:/var/www/html/uefm/include/head.php</file>
-            <file>file:/var/www/html/uefm/models/MatriculaModel.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -1,6 +1,26 @@
 <?php
 
 require_once('tcpdf_include.php');
+require '../../../libs/Config.php'; //de configuracion
+require '../../../libs/SPDO.php'; //PDO con singleton
+require '../../../config.php'; //Archivo con configuraciones.
+		
+$db = SPDO::singleton();
+
+$array_matricula = $db->consultRegistroSql("
+            SELECT 
+                    m.*,
+                    c.nombre as curso,
+                    u.primer_nombre ,
+                    u.segundo_nombre ,
+                    u.primer_apellido ,                                          
+                    u.segundo_apellido,
+                    td.nombre as tipo_documento
+            FROM matricula AS m
+                    INNER JOIN usuario as u ON m.estudiante=u.id
+                    LEFT JOIN tipo_documento as td ON u.tipo_documento=td.id
+                    INNER JOIN curso AS c ON c.id=m.curso	
+            WHERE m.id = ".$_GET["id"].";");
 
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF {
@@ -8,6 +28,24 @@ class MYPDF extends TCPDF {
     //Page header
     public function Header() {
         // Logo
+        $db = SPDO::singleton();
+        $array_matricula = $db->consultRegistroSql("
+            SELECT 
+                    m.*,
+                    c.nombre as curso,
+                    u.primer_nombre ,
+                    u.segundo_nombre ,
+                    u.primer_apellido ,                                          
+                    u.segundo_apellido,
+                    td.nombre as tipo_documento
+            FROM matricula AS m
+                    INNER JOIN usuario as u ON m.estudiante=u.id
+                    LEFT JOIN tipo_documento as td ON u.tipo_documento=td.id
+                    INNER JOIN curso AS c ON c.id=m.curso	
+            WHERE m.id = ".$_GET["id"].";");
+
+        $qr= "Cod ".$array_matricula[id].": ".$array_matricula[anio]." ".$array_matricula[curso]." ".$array_matricula[primer_nombre]." ".$array_matricula[segundo_nombre]." ".$array_matricula[primer_apellido]." ".$array_matricula[segundo_apellido];
+        
         $image_file = K_PATH_IMAGES . 'logo.jpg';
         $this->Image($image_file, 15, 5, 22, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
@@ -39,7 +77,7 @@ class MYPDF extends TCPDF {
                 'module_height' => 1 // height of a single module in points
         );
         $this->Ln();
-        $this->write2DBarcode('WILLIAM BARBOSA', 'QRCODE,L', 173, 6, 22, 22, $style, 'N');
+        $this->write2DBarcode($qr, 'QRCODE,L', 173, 6, 22, 22, $style, 'N');
         
     }
 
@@ -120,32 +158,32 @@ $html = <<<EOF
 		border: 1px solid #E3E3E3;	
                 
 	}
-</style>
-<h3>Pago de Año 2016</h3>        
+</style>    
+<h3>Pago de Año $array_matricula[anio]</h3>        
 <table>
  <tr>
   <td><b>Tipo Documento</b></td>
-  <td></td>
+  <td>$array_matricula[tipo_documento]</td>
   <td><b>Numero Documento</b></td>
-  <td></td>
+  <td>$array_matricula[numero_documento]</td>
  </tr>       
  <tr>
   <td><b>Nombres y Apellidos</b></td>
-  <td colspan="3"></td>  
+  <td colspan="3">$array_matricula[primer_nombre] $array_matricula[segundo_nombre] $array_matricula[primer_apellido] $array_matricula[segundo_apellido]</td>  
  </tr> 
  <tr>
   <td width="180"><b>Grado en el que se matricula</b></td>
-  <td width="458" colspan="3"></td>  
+  <td width="458" colspan="3">$array_matricula[curso]</td>  
  </tr>                 
  <tr>
   <td width="280"><b>Cancelo el valor de la matricula por valor de $</b></td>
-  <td></td>  
+  <td>$array_matricula[valor_matricula]</td>  
   <td width="60"><b>Agenda:</b></td>
-  <td width="145"></td>  
+  <td width="145">$array_matricula[valor_agenda]</td>  
  </tr>                 
  <tr>
   <td width="130"><b>Formulario de fecha</b></td>
-  <td width="125"></td>  
+  <td width="125">$array_matricula[fecha_crear]</td>  
   <td width="260"><b>Fecha para entrega con hoja de matricula:</b></td>
   <td width="123"></td>  
  </tr>                 
@@ -157,8 +195,7 @@ $html = <<<EOF
   <td align="center"><br/><br/><br/><br/><br/><br/><b>FIRMA DEL RECTOR (A)</b></td>  
  </tr>
  <tr>
-  <td colspan="2"><br/><br/><br/><br/><br/><br/><b>FIRMA</b></td>
-  <td align="center"><br/><br/><br/><br/><br/><br/><b>FIRMA DEL RECTOR (A)</b></td>  
+  <td align="center"colspan="2"><br/><br/><br/><br/><br/><br/><b>SELLO</b></td>  
  </tr>
  </table>        
         

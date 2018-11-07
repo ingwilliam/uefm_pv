@@ -118,13 +118,13 @@ $titulo = "Matricula";
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label" for="curso">Grado</label>
                                                     <div class="col-sm-10">
-                                                        <?php $vars["formXhtml"]->select("curso", "curso", $vars["arrayRegistro"]["curso"], "form-control", "Grado", "", "curso", "id", "nombre", "", "1", " nombre ASC"); ?>                                                
+                                                        <?php $vars["formXhtml"]->select("curso", "curso", $vars["arrayRegistro"]["curso"], "form-control", "Grado", "", "curso", "id", "nombre", "", "1", " orden ASC"); ?>                                                
                                                     </div>                                            
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label" for="numero_documento">Numero de documento</label>
                                                     <div class="col-sm-10">
-                                                        <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control", "Numero de documento"); ?>
+                                                        <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control numeric", "Numero de documento"); ?>
                                                     </div>
                                                 </div>                                           
                                             </div>
@@ -221,13 +221,24 @@ $titulo = "Matricula";
                                 ?>
                                 <div class="row">
                                     <?php
+                                    if($vars["dataUser"]["array_perfil"]["1"]||$vars["dataUser"]["array_perfil"]["2"])
+                                    {
+                                    ?>
+                                    <center>
+                                    <img src="dist/img/ValorMatricula2018.png" width="1000px" />
+                                    </center>
+                                    <br/>
+                                    <?php
+                                    }
+                                    ?>
+                                    <?php
                                     if ($vars["accion"] == "editar") {
                                         ?>
                                         <div class="col-md-6">
                                             <?php
                                         }
                                         ?>
-                                        <div class="box box-primary">
+                                        <div class="box box-primary">                                                                                        
                                             <div class="box-header with-border">
                                                 <h3 class="box-title"><?php echo $vars["tituloMetodo"]; ?> <?php echo $titulo; ?></h3>
                                             </div>
@@ -248,40 +259,100 @@ $titulo = "Matricula";
                                                             <?php $vars["formXhtml"]->select("anio", "anio", $vars["arrayRegistro"]["anio"], "validar form-control", "Año matricula", "", "", "", "", "", "", "", $vars["anios"]); ?>                                                
                                                         </div>                                            
                                                     </div>
+                                                    <?php
+                                                    if($vars["dataUser"]["array_perfil"]["1"]||$vars["dataUser"]["array_perfil"]["2"])
+                                                    {
+                                                        
+                                                    if($vars["arrayRegistro"]["categoria"]=="Ninguna")
+                                                    {
+                                                    ?>
+                                                        <style type="text/css">
+                                                            .texto_categoria{
+                                                                display: none;
+                                                            }
+                                                            .caja_categoria{
+                                                                display: block;
+                                                            }
+                                                        </style>
+                                                    <?php
+                                                    }
+                                                    else
+                                                    {
+                                                    ?>
+                                                        <style type="text/css">
+                                                            .texto_categoria{
+                                                                display: block;
+                                                            }
+                                                            .caja_categoria{
+                                                                display: none;
+                                                            }
+                                                        </style>
+                                                    <?php
+                                                    }
+                                                        
+                                                        
+                                                    ?>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label" for="estado">Estado matricula</label>
+                                                        <div class="col-sm-10">
+                                                            <?php $vars["formXhtml"]->radio("estado", "estado", $vars["arrayRegistro"]["estado"], "", "Estado de matricula", "", array("Matriculado" => "Matriculado", "Revisado" => "Revisado", "Inscrito" => "Inscrito")); ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label" for="estado">Categoria:</label>
+                                                        <div class="col-sm-10">
+                                                            <?php $vars["formXhtml"]->radio("categoria", "categoria", $vars["arrayRegistro"]["categoria"], "categoria", "Categoria", "", array("A" => "A", "B" => "B", "C" => "C", "D" => "D", "Ninguna" => "Ninguna")); ?>
+                                                        </div>
+                                                    </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="valor_matricula">Valor matricula</label>
-                                                        <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_matricula", "valor_matricula", $vars["arrayRegistro"]["valor_matricula"], "validar numeric form-control", "Valor matricula"); ?>
+                                                        <div class="col-sm-10 texto_categoria">
+                                                            <?php echo $vars["arrayRegistro"]["valor_matricula"];?>
+                                                        </div>
+                                                        <div class="col-sm-10 caja_categoria">
+                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_matricula", "valor_matricula", $vars["arrayRegistro"]["valor_matricula"], "numeric form-control", "Valor matricula"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="valor_pension">Valor pensión</label>
-                                                        <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_pension", "valor_pension", $vars["arrayRegistro"]["valor_pension"], "validar numeric form-control", "Valor pensión"); ?>
+                                                        <div class="col-sm-10 texto_categoria">
+                                                            <?php echo $vars["arrayRegistro"]["valor_pension"]; ?>
+                                                        </div>
+                                                        <div class="col-sm-10 caja_categoria">
+                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_pension", "valor_pension", $vars["arrayRegistro"]["valor_pension"], "numeric form-control", "Valor pensión"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="valor_pension">Valor Formulario</label>
-                                                        <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_formulario", "valor_formulario", $vars["arrayRegistro"]["valor_formulario"], "validar numeric form-control", "Valor Formulario"); ?>
+                                                        <div class="col-sm-10 texto_categoria">
+                                                            <?php echo $vars["arrayRegistro"]["valor_formulario"]; ?>
+                                                        </div>
+                                                        <div class="col-sm-10 caja_categoria">
+                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_formulario", "valor_formulario", $vars["arrayRegistro"]["valor_formulario"], "numeric form-control", "Valor Formulario"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-2 control-label" for="valor_agenda">Valor Agenda</label>
-                                                        <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_agenda", "valor_agenda", $vars["arrayRegistro"]["valor_agenda"], "validar numeric form-control", "Valor Agenda"); ?>
+                                                        <label class="col-sm-2 control-label" for="valor_agenda">Valor Agenda o Pre Matricula</label>
+                                                        <div class="col-sm-10 texto_categoria">
+                                                            <?php echo $vars["arrayRegistro"]["valor_agenda"]; ?>
+                                                        </div>
+                                                        <div class="col-sm-10 caja_categoria">
+                                                            <?php $vars["formXhtml"]->inputtext("text", "valor_agenda", "valor_agenda", $vars["arrayRegistro"]["valor_agenda"], "numeric form-control", "Valor Agenda"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="observaciones_matricula">Observaciones matricula</label>
                                                         <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->textarea("observaciones_matricula", "observaciones_matricula", $vars["arrayRegistro"]["observaciones_matricula"], "validar form-control", "Observaciones matricula");?>
+                                                            <?php $vars["formXhtml"]->textarea("observaciones_matricula", "observaciones_matricula", $vars["arrayRegistro"]["observaciones_matricula"], "form-control", "Observaciones matricula");?>
                                                         </div>
                                                     </div>
+                                                    <?php
+                                                    }
+                                                    ?>                                                    
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="curso">Grado</label>
                                                         <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->select("curso", "curso", $vars["arrayRegistro"]["curso"], "validar form-control", "Grado", "", "curso", "id", "nombre", "", "1", " nombre ASC"); ?>
+                                                            <?php $vars["formXhtml"]->select("curso", "curso", $vars["arrayRegistro"]["curso"], "validar form-control", "Grado", "", "curso", "id", "nombre", "", "1", " orden ASC"); ?>
                                                         </div>
                                                     </div>
 
@@ -294,7 +365,7 @@ $titulo = "Matricula";
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="numero_documento">Numero de documento</label>
                                                         <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control", "Numero de documento"); ?>
+                                                            <?php $vars["formXhtml"]->inputtext("text", "numero_documento", "numero_documento", $vars["arrayRegistro"]["numero_documento"], "validar form-control numeric", "Numero de documento"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -307,11 +378,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="primer_nombre">Primer nombre</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["primer_nombre"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                            //    echo $vars["arrayRegistro"]["primer_nombre"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->inputtext("text", "primer_nombre", "primer_nombre", $vars["arrayRegistro"]["primer_nombre"], "validar form-control", "Primer nombre");
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -319,11 +390,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="segundo_nombre">Segundo nombre</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["segundo_nombre"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                            //    echo $vars["arrayRegistro"]["segundo_nombre"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->inputtext("text", "segundo_nombre", "segundo_nombre", $vars["arrayRegistro"]["segundo_nombre"], "form-control", "Segundo nombre");
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -331,11 +402,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="primer_apellido">Primer apellido</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["primer_apellido"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                              //  echo $vars["arrayRegistro"]["primer_apellido"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->inputtext("text", "primer_apellido", "primer_apellido", $vars["arrayRegistro"]["primer_apellido"], "validar form-control", "Primer apellido");
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -343,11 +414,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="segundo_apellido">Segundo apellido</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["segundo_apellido"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                            //    echo $vars["arrayRegistro"]["segundo_apellido"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->inputtext("text", "segundo_apellido", "segundo_apellido", $vars["arrayRegistro"]["segundo_apellido"], "form-control", "Segundo apellido");
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -355,11 +426,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="genero">Genero</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["genero"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                            //    echo $vars["arrayRegistro"]["genero"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->radio("genero", "genero", $vars["arrayRegistro"]["genero"], "validar", "Genero", "", array("M" => "M", "F" => "F"));
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -379,11 +450,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="fecha_nacimiento">Fecha de nacimiento</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["fecha_nacimiento"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                            //    echo $vars["arrayRegistro"]["fecha_nacimiento"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->inputtext("text", "fecha_nacimiento", "fecha_nacimiento", $vars["arrayRegistro"]["fecha_nacimiento"], "validar form-control calendario", "Fecha de nacimiento", "", "", "", "", "", "", true);
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -461,11 +532,11 @@ $titulo = "Matricula";
                                                         <label class="col-sm-2 control-label" for="rh">RH</label>
                                                         <div class="col-sm-10">
                                                             <?php
-                                                            if (isset($vars["estudiante"])) {
-                                                                echo $vars["arrayRegistro"]["rh"];
-                                                            } else {
+                                                            //if (isset($vars["estudiante"])) {
+                                                            //    echo $vars["arrayRegistro"]["rh"];
+                                                            //} else {
                                                                 $vars["formXhtml"]->inputtext("text", "rh", "rh", $vars["arrayRegistro"]["rh"], "validar form-control", "RH");
-                                                            }
+                                                            //}
                                                             ?>
                                                         </div>
                                                     </div>
@@ -478,13 +549,13 @@ $titulo = "Matricula";
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="ips">IPS</label>
                                                         <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "ips", "ips", $vars["arrayRegistro"]["ips"], "validar form-control", "IPS"); ?>
+                                                            <?php $vars["formXhtml"]->inputtext("text", "ips", "ips", $vars["arrayRegistro"]["ips"], "form-control", "IPS"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="ars">ARS</label>
                                                         <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "ars", "ars", $vars["arrayRegistro"]["ars"], "validar form-control", "ARS"); ?>
+                                                            <?php $vars["formXhtml"]->inputtext("text", "ars", "ars", $vars["arrayRegistro"]["ars"], "form-control", "ARS"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -502,7 +573,7 @@ $titulo = "Matricula";
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label" for="telefono">Telefono</label>
                                                         <div class="col-sm-10">
-                                                            <?php $vars["formXhtml"]->inputtext("text", "telefono", "telefono", $vars["arrayRegistro"]["telefono"], "validar numeric form-control", "Telefono"); ?>
+                                                            <?php $vars["formXhtml"]->inputtext("text", "telefono", "telefono", $vars["arrayRegistro"]["telefono"], "numeric form-control", "Telefono"); ?>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -871,7 +942,7 @@ $titulo = "Matricula";
                                                         <div class="form-group">
                                                             <label class="col-sm-2 control-label" for="telefono">Telefono</label>
                                                             <div class="col-sm-10">
-                                                                <?php $vars["formXhtml"]->inputtext("text", "telefono", "telefono", $vars["arrayRegistroAcudiente"]["telefono"], "validar numeric form-control", "Telefono"); ?>
+                                                                <?php $vars["formXhtml"]->inputtext("text", "telefono", "telefono", $vars["arrayRegistroAcudiente"]["telefono"], "numeric form-control", "Telefono"); ?>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -974,7 +1045,7 @@ $titulo = "Matricula";
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label" for="curso">Grado</label>
                                                     <div class="col-sm-10">
-                                                        <?php $vars["formXhtml"]->select("curso", "curso", $vars["arrayRegistro"]["curso"], "validar form-control", "Grado", "", "curso", "id", "nombre", "", "1", " nombre ASC"); ?>                                                
+                                                        <?php $vars["formXhtml"]->select("curso", "curso", $vars["arrayRegistro"]["curso"], "validar form-control", "Grado", "", "curso", "id", "nombre", "", "1", " orden ASC"); ?>                                                
                                                     </div>                                            
                                                 </div>
                                                 <div class="form-group">
@@ -986,7 +1057,7 @@ $titulo = "Matricula";
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label" for="estado">Estado matricula</label>
                                                     <div class="col-sm-10">
-                                                        <?php $vars["formXhtml"]->radio("estado", "estado", $vars["arrayRegistro"]["estado"], "", "Estado de matricula", "", array("2" => "No aplica", "Matriculado" => "Matriculado", "Revisado" => "Revisado", "Inscritos" => "Inscrito")); ?>
+                                                        <?php $vars["formXhtml"]->radio("estado", "estado", $vars["arrayRegistro"]["estado"], "", "Estado de matricula", "", array("2" => "No aplica", "Matriculado" => "Matriculado", "Revisado" => "Revisado", "Inscrito" => "Inscrito")); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1092,8 +1163,8 @@ $titulo = "Matricula";
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr>
-                                                <th>Usuario Registro</th>
-                                                <th>Fecha Registro</th>
+                                                <th>Usuario y Fecha Crear</th>
+                                                <th>Usuario y Fecha Editar </th>
                                                 <th>Año matricula</th>
                                                 <th>Grado</th>
                                                 <th>Tipo de Documento</th>
@@ -1121,16 +1192,16 @@ $titulo = "Matricula";
                                                 }
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $item['usuario_crear']; ?></td>
-                                                    <td><?php echo $item['fecha_crear']; ?></td>
+                                                    <td><?php echo $item['usuario_crear']; ?> <b><?php echo $item['fecha_crear']; ?></b></td>
+                                                    <td><?php echo $item['usuario_editar']; ?> <b><?php echo $item['fecha_editar']; ?></b></td>
                                                     <td><?php echo $item['anio']; ?></td>
                                                     <td><?php echo $item['curso']; ?></td>
                                                     <td><?php echo utf8_encode($item['tipo_documento']); ?></td>
                                                     <td><?php echo $item['numero_documento']; ?></td>
                                                     <td><?php echo $item['primer_nombre'] . " " . $item['segundo_nombre']; ?></td>
                                                     <td><?php echo $item['primer_apellido'] . " " . $item['segundo_apellido']; ?></td>
-                                                    <td><a href="libs/TCPDF-master/examples/formato_matricula.php?id=<?php echo $item['id']; ?>"><span class="fa fa-file-pdf-o"/> </a></td>
-                                                    <td><a href="libs/TCPDF-master/examples/formato_matricula.php?id=<?php echo $item['id']; ?>"><span class="fa fa-file-pdf-o"/> </a></td>
+                                                    <td><a target="_blank" href="libs/TCPDF-master/examples/formato_matricula.php?id=<?php echo $item['id']; ?>"><span class="fa fa-file-pdf-o"/> </a></td>
+                                                    <td><a target="_blank" href="libs/TCPDF-master/examples/formato_pago_matricula.php?id=<?php echo $item['id']; ?>"><span class="fa fa-file-pdf-o"/> </a></td>
                                                     <td><button title="<?php echo $item['id']; ?>" data-toggle="modal" data-target="#opciones_matricula" class="btn_estado btn <?php echo $color; ?> btn-flat" type="button"><i class="fa fa-cogs"></i></button></td>
                                                     <td>
                                                         <?php

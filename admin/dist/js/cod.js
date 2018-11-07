@@ -1,7 +1,70 @@
 $(document).ready(function () {
+    
+    $(".plan_estudio").change(function(){        
+        $.post("index.php?controlador=Planeacion&accion=selectMetas", {
+            id: $(this).val()
+        } ,function(data){
+            $("#meta").empty();            
+            $("#meta").append(data);
+        });        
+    });
+    
+    $(".meta").change(function(){        
+        $.post("index.php?controlador=Planeacion&accion=selectDesempeno", {
+            id2: $(this).val(),
+            id: $("#plan_estudio").val()
+        } ,function(data){
+            $("#desempeno").empty();            
+            $("#desempeno").append(data);
+        });        
+    });
+    
+    $(".desempeno").change(function(){        
+        $.post("index.php?controlador=Planeacion&accion=selectValoracion", {
+            id2: $(this).val(),
+            id: $("#plan_estudio").val()
+        } ,function(data){
+            $("#valoracion").empty();            
+            $("#valoracion").append(data);
+        });        
+    });
+    
+    
+    $(".categoria").click(function () {
+        if($(this).val()=="Ninguna")
+        {
+            $(".texto_categoria").css("display","none");
+            $(".caja_categoria").css("display","block");
+        }
+        else
+        {
+            $(".texto_categoria").css("display","block");
+            $(".caja_categoria").css("display","none");
+        }                
+    });
+    
+    $(".botonExcel").click(function () {
+        $("#datos_a_enviar").val($("<div>").append($(".tabla_exportar").eq(0).clone()).html());
+        $("#FormularioExportacion").submit();
+    });    
         
     $('.btn_estado').click(function(){
         $("#idEstado").val($(this).attr('title'));
+    });
+    
+    $('.mod_pension').click(function(){
+        $("#matricula").val($(this).attr('title'));
+        $("#mes").val($(this).attr('dir'));
+        if($(".estado"+$(this).attr('dir')+$(this).attr('title')).val()!="")
+        {
+            $('input[name=estado][value='+$(".estado"+$(this).attr('dir')+$(this).attr('title')).val()+']').prop('checked', 'checked');
+        }
+        else
+        {
+            $('input[name=estado][value=Pendiente').prop('checked', 'checked');
+        }
+        $("#nota_observaciones").html($(".observaciones"+$(this).attr('dir')+$(this).attr('title')).val());
+        
     });
     
     $('#cargar_acudiente').click(function(){
@@ -82,6 +145,30 @@ $(document).ready(function () {
         }, function (data) {
 
             $("#divCheckBuscadortiposervicio").html(data);
+
+        });
+    });
+    
+    $("#textCheckBuscadorcurso").keyup(function () {
+        var usu = $("#id").attr('value');
+        $.post("index.php?controlador=" + $("#controladorCheckBuscador").val() + "&accion=" + $("#accionCheckBuscador").val() + "", {
+            cadena: $(this).val(),
+            usuario: usu
+        }, function (data) {
+
+            $("#divCheckBuscadorcurso").html(data);
+
+        });
+    });
+
+    $("#textCheckBuscadorcurso").keyup(function () {
+        var usu = $("#id").attr('value');
+        $.post("index.php?controlador=" + $("#controladorCheckBuscador").val() + "&accion=" + $("#accionCheckBuscador").val() + "", {
+            valor: $(this).val(),
+            usuario: usu
+        }, function (data) {
+
+            $("#divCheckBuscadorcurso").html(data);
 
         });
     });

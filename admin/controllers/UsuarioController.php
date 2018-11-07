@@ -41,9 +41,13 @@ class UsuarioController extends ControllerBase {
             $arrayRegistro[$this->id] = "";
             if ($_GET["busqueda"]) {
                 unset($_GET["busqueda"]);
+                
+                if($_GET["perfil"]=="")
+                    unset($_GET["perfil"]);    
+                
                 $eliminaCaracter = false;
                 foreach ($_GET as $clave => $valor) {
-                    if (($clave != "busqueda" ) && ($clave != "controlador" ) && ($clave != "accion" ) && ($clave != "page" )&& ($clave != "max" )&& ($clave != "item" )) {
+                    if (($clave != "busqueda" ) && ($clave != "controlador" ) && ($clave != "accion" ) && ($clave != "page" )&& ($clave != "max" )&& ($clave != "item" )&& ($clave != "perfil" )) {
                         if ($valor) {
                             $eliminaCaracter = true;
                             $parametros_busqueda = $parametros_busqueda."&$clave=$valor";
@@ -101,6 +105,13 @@ class UsuarioController extends ControllerBase {
                 ON $this->table.tipo_documento=tipo_documento.id
             INNER JOIN usuario AS usuario_crear ON $this->table.usuario_crear=usuario_crear.id
                 ";
+        if(isset($_GET["perfil"]))
+        {
+           $sql = $sql ." INNER JOIN usuario_perfil ON usuario_perfil.usuario = $this->table.id"; 
+           $busqueda = $busqueda . " AND usuario_perfil.perfil = '" . $_GET["perfil"] . "'";
+           $parametros_busqueda = $parametros_busqueda."&perfil=".$_GET["perfil"];
+        }
+        
         //Se une los sql con las posibles concatenaciones
         $sql = $sql . $busqueda . " ORDER BY $this->table.$this->id DESC";
 

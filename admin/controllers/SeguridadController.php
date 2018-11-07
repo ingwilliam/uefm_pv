@@ -46,13 +46,12 @@ class SeguridadController extends ControllerBase {
         $arrayModulos = $modulo->listArraySql("SELECT * FROM modulo WHERE activo = true","id");
         $arrayPermisos = $permiso->listArraySql("SELECT * FROM permiso WHERE activo = true","id");
         
-        print_r($arrayPerfiles);
-        
         //Pasamos a la vista toda la información que se desea representar
         $vars = array();
         $vars['arrayPerfiles'] = $arrayPerfiles;
         $vars['arrayModulos'] = $arrayModulos;
         $vars['arrayPermisos'] = $arrayPermisos;
+        $vars['arrayPermiso'] = $arrayPermiso;
         $vars['objSeguridad'] = $seguridad;
         $vars['formularioNuevo'] = true;
         $vars['formXhtml'] = $formXhtml;

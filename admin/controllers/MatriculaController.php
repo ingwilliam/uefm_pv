@@ -17,8 +17,8 @@ class MatriculaController extends ControllerBase {
         /*
          * ME QUEDE EN EL PDF ENVIANDO EL ID Y MOSTRAR INFORMACION DINAMICA OK
          */
-        
-        
+
+
         //Creamos una instancia de nuestro "modelo"
         $Matricula = new MatriculaModel();
         $modulo = new ModuloModel();
@@ -32,40 +32,42 @@ class MatriculaController extends ControllerBase {
         $arrayModulo = $modulo->consultModuloWhere("pagina= '" . $this->pagina . "'");
 
         $arrayPermiso = array();
-        
+
+
+       
         
         foreach ($arrayDatosUser["usuario_perfil"] as $clave => $valor) {
             if ($valor["usuario"] == $arrayDatosUser["id"] && $valor["modulo"] == $arrayModulo["id"]) {
                 $arrayPermiso[] = $valor["permiso"];
             }
         }
-
+        
         //determina que consulta fue la que realizo en matricula en la busqueda
-        $parametros_busqueda="&busqueda=".$_GET["busqueda"];
+        $parametros_busqueda = "&busqueda=" . $_GET["busqueda"];
         $busqueda_usuario = "";
         $busqueda_matricula = "";
-        if($_GET["estado"]=="2")
-        {
-            unset($_GET["estado"]); 
+        if ($_GET["estado"] == "2") {
+            unset($_GET["estado"]);
         }
         if ($_GET) {
             $arrayRegistro = $_GET;
             $arrayRegistro[$this->id] = "";
             if ($_GET["busqueda"]) {
-                unset($_GET["busqueda"]);                
+                unset($_GET["busqueda"]);
                 $eliminaCaracter = false;
                 foreach ($_GET as $clave => $valor) {
-                    if (($clave != "busqueda" ) && ($clave != "controlador" ) && ($clave != "accion" ) && ($clave != "page" )&& ($clave != "max" )&& ($clave != "item" )) {
+                    if (($clave != "busqueda" ) && ($clave != "controlador" ) && ($clave != "accion" ) && ($clave != "page" ) && ($clave != "max" ) && ($clave != "item" )) {
                         if ($valor) {
-                                $eliminaCaracter = true;
-                                if ($clave == "primer_nombre" || $clave == "primer_apellido") {
-                                    $busqueda_usuario = $busqueda_usuario . " usuario.$clave LIKE '%" . $valor . "%' AND";
-                                } else {
-                                    if ($clave == "numero_documento") {
-                                        $busqueda_matricula = $busqueda_matricula . " $this->table.$clave LIKE '%" . $valor . "%' AND";
-                                    } else
-                                        $busqueda_matricula = $busqueda_matricula . " $this->table.$clave = '" . $valor . "' AND";
-                                }                            
+                            $eliminaCaracter = true;
+                            $parametros_busqueda = $parametros_busqueda."&$clave=$valor";
+                            if ($clave == "primer_nombre" || $clave == "primer_apellido") {
+                                $busqueda_usuario = $busqueda_usuario . " usuario.$clave LIKE '%" . $valor . "%' AND";
+                            } else {
+                                if ($clave == "numero_documento") {
+                                    $busqueda_matricula = $busqueda_matricula . " $this->table.$clave LIKE '%" . $valor . "%' AND";
+                                } else
+                                    $busqueda_matricula = $busqueda_matricula . " $this->table.$clave = '" . $valor . "' AND";
+                            }
                         }
                     }
                 }
@@ -78,16 +80,16 @@ class MatriculaController extends ControllerBase {
         } else {
             $arrayRegistro = $Matricula->estructuraMatricula();
         }
-        
+
         //Pasamos a la vista toda la información que se desea representar        
         $vars = array();
         if ($_GET["id"]) {
             if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
                 if ($_GET["a"]) {
-                    $array = array("id" => $_GET["id"], "activo" => "1");
+                    $array = array("id" => $_GET["id"], "activo" => "1","fecha_editar" => date("Y-m-d H:i:s"),"usuario_editar" => $arrayDatosUser["id"]);                    
                     $Matricula->modMatricula($array);
                 } else {
-                    $array = array("id" => $_GET["id"], "activo" => "0");
+                    $array = array("id" => $_GET["id"], "activo" => "0","fecha_editar" => date("Y-m-d H:i:s"),"usuario_editar" => $arrayDatosUser["id"]);
                     $Matricula->modMatricula($array);
                 }
             } else {
@@ -95,23 +97,17 @@ class MatriculaController extends ControllerBase {
                 $vars['alerta'] = 3;
             }
         }
-        
-        if(isset($_POST["idEstado"]))
-        {
+
+        if (isset($_POST["idEstado"])) {
             if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
-                if($_POST["estadoEditar"]=="Matriculado")
-                {
-                    if(in_array("1", $arrayDatosUser["array_perfil"]) == true||in_array("2", $arrayDatosUser["array_perfil"]) == true)
-                    {
-                        $array = array("id" => $_POST["idEstado"], "estado" => $_POST["estadoEditar"]);
-                        $Matricula->modMatricula($array);   
+                if ($_POST["estadoEditar"] == "Matriculado") {
+                    if (in_array("1", $arrayDatosUser["array_perfil"]) == true || in_array("2", $arrayDatosUser["array_perfil"]) == true) {
+                        $array = array("id" => $_POST["idEstado"], "estado" => $_POST["estadoEditar"],"fecha_editar" => date("Y-m-d H:i:s"),"usuario_editar" => $arrayDatosUser["id"]);
+                        $Matricula->modMatricula($array);
                     }
-                }
-                else
-                {
-                    if(in_array("1", $arrayDatosUser["array_perfil"]) == true||in_array("2", $arrayDatosUser["array_perfil"]) == true||in_array("3", $arrayDatosUser["array_perfil"]) == true)
-                    {
-                        $array = array("id" => $_POST["idEstado"], "estado" => $_POST["estadoEditar"]);
+                } else {
+                    if (in_array("1", $arrayDatosUser["array_perfil"]) == true || in_array("2", $arrayDatosUser["array_perfil"]) == true || in_array("3", $arrayDatosUser["array_perfil"]) == true || in_array("4", $arrayDatosUser["array_perfil"]) == true) {
+                        $array = array("id" => $_POST["idEstado"], "estado" => $_POST["estadoEditar"],"fecha_editar" => date("Y-m-d H:i:s"),"usuario_editar" => $arrayDatosUser["id"]);
                         $Matricula->modMatricula($array);
                     }
                 }
@@ -120,12 +116,13 @@ class MatriculaController extends ControllerBase {
                 $vars['alerta'] = 3;
             }
         }
-        
+
 
         //Consulta sql del modulo
         $sql = "SELECT
                     $this->table.id,
                     $this->table.fecha_crear,
+                    $this->table.fecha_editar,
                     $this->table.anio,
                     curso.nombre as curso,
                     usuario.primer_nombre ,
@@ -137,34 +134,35 @@ class MatriculaController extends ControllerBase {
                     $this->table.estado ,
                     usuario.fecha_nacimiento,
                     tipo_documento.nombre as tipo_documento,
-                    CONCAT(usuario_crear.primer_nombre, ' ', usuario_crear.segundo_nombre, ' ', usuario_crear.primer_apellido, ' ', usuario_crear.segundo_apellido) AS usuario_crear
+                    CONCAT(usuario_crear.primer_nombre, ' ', usuario_crear.segundo_nombre, ' ', usuario_crear.primer_apellido, ' ', usuario_crear.segundo_apellido) AS usuario_crear,
+                    CONCAT(usuario_editar.primer_nombre, ' ', usuario_editar.segundo_nombre, ' ', usuario_editar.primer_apellido, ' ', usuario_editar.segundo_apellido) AS usuario_editar
                 FROM 
                     $this->table
                 INNER JOIN usuario ON $this->table.estudiante=usuario.id
                 LEFT JOIN tipo_documento ON $this->table.tipo_documento=tipo_documento.id
                 INNER JOIN curso ON $this->table.curso=curso.id
                 INNER JOIN usuario AS usuario_crear ON $this->table.usuario_crear=usuario_crear.id
+                LEFT JOIN usuario AS usuario_editar ON $this->table.usuario_editar=usuario_editar.id
                         ";
         //Se une los sql con las posibles concatenaciones
-        $sql = $sql . $busqueda_usuario . $busqueda_matricula . " ORDER BY $this->table.anio,$this->table.numero_documento";
+        $sql = $sql . $busqueda_usuario . $busqueda_matricula . " ORDER BY $this->table.fecha_crear DESC,$this->table.numero_documento ";
 
         //creamos el objeto para el generador de etiquetas
         $formXhtml = new Xhtml();
 
         //Cramos el paginador
         $paginador = new PHPPaging($modulo->thisdb());
-        $paginador->param = "&controlador=Matricula&accion=matricula".$parametros_busqueda;
+        $paginador->param = "&controlador=Matricula&accion=matricula" . $parametros_busqueda;
         $paginador->rowCount($sql);
         $paginador->config(3, 30);
-        
-        $sql = $sql." LIMIT $paginador->start_row, $paginador->max_rows";
-        
-        
-        $consulta = $modulo->listarPaginador($sql);        
-        $arrayPaginador = array();        
-        while( $registro = $consulta->fetch(PDO::FETCH_ASSOC) )
-        {
-                $arrayPaginador[] = $registro;            
+
+        $sql = $sql . " LIMIT $paginador->start_row, $paginador->max_rows";
+
+
+        $consulta = $modulo->listarPaginador($sql);
+        $arrayPaginador = array();
+        while ($registro = $consulta->fetch(PDO::FETCH_ASSOC)) {
+            $arrayPaginador[] = $registro;
         }
 
         //Pasamos a la vista toda la información que se desea representar
@@ -172,47 +170,49 @@ class MatriculaController extends ControllerBase {
         if ($arrayRegistro["anio"] == "") {
             $arrayRegistro["anio"] = date('Y');
         }
+        
+        $where="";
+        if ($_GET["curso"] != "") {
+            $where = " AND curso = ".$_GET["curso"];
+        }
+        
+        
 
-        $arrayMatriculados = $Matricula->listMatriculaSql("SELECT estado, count(id) AS total FROM matricula WHERE anio = '".$arrayRegistro["anio"]."' GROUP BY estado");
-                
+        $arrayMatriculados = $Matricula->listMatriculaSql("SELECT estado, count(id) AS total FROM matricula WHERE anio = '" . $arrayRegistro["anio"] . "' $where GROUP BY estado");
+
         $matriculados = 0;
         $revisados = 0;
         $inscritos = 0;
-        foreach($arrayMatriculados as $clave => $valor)
-        {
-            if($valor["estado"]==""||$valor["estado"]==null||$valor["estado"]=="Inscrito"||$valor["estado"]=="null")
-            {
-                $inscritos=$inscritos+$valor["total"];
+        foreach ($arrayMatriculados as $clave => $valor) {
+            if ($valor["estado"] == "" || $valor["estado"] == null || $valor["estado"] == "Inscrito" || $valor["estado"] == "null") {
+                $inscritos = $inscritos + $valor["total"];
             }
-            
-            if($valor["estado"]=="Revisado")
-            {
-                $revisados=$revisados+$valor["total"];
+
+            if ($valor["estado"] == "Revisado") {
+                $revisados = $revisados + $valor["total"];
             }
-            
-            if($valor["estado"]=="Matriculado")
-            {
-                $matriculados=$matriculados+$valor["total"];
-            }                        
-            
+
+            if ($valor["estado"] == "Matriculado") {
+                $matriculados = $matriculados + $valor["total"];
+            }
         }
-        
+
         $matriculadosp = 0;
         $revisadosp = 0;
         $inscritosp = 0;
-        
-        $total=$matriculados+$revisados+$inscritos;
-        
-        
+
+        $total = $matriculados + $revisados + $inscritos;
+
+
         $matriculadosp = round($matriculados / $total * 100, 2);
         $revisadosp = round($revisados / $total * 100, 2);
         $inscritosp = round($inscritos / $total * 100, 2);
-        
-        
+
+
         if (!isset($_GET["estado"])) {
             $arrayRegistro["estado"] = "2";
         }
-        
+
         $vars['arrayPaginador'] = $arrayPaginador;
         $vars['paginador'] = $paginador;
         $vars['anios'] = Resources::anio();
@@ -262,7 +262,7 @@ class MatriculaController extends ControllerBase {
         $formXhtml = new Xhtml();
 
         //determina que consulta fue la que realizo en matricula en la busqueda
-        $parametros_busqueda="&busqueda=".$_GET["busqueda"];
+        $parametros_busqueda = "&busqueda=" . $_GET["busqueda"];
         $busqueda = "";
         if ($_GET) {
             $arrayRegistro = $_GET;
@@ -271,7 +271,7 @@ class MatriculaController extends ControllerBase {
                 unset($_GET["busqueda"]);
                 $eliminaCaracter = false;
                 foreach ($_GET as $clave => $valor) {
-                    if (($clave != "busqueda" ) && ($clave != "controlador" ) && ($clave != "accion" ) && ($clave != "page" )&& ($clave != "max" )&& ($clave != "item" )) {
+                    if (($clave != "busqueda" ) && ($clave != "controlador" ) && ($clave != "accion" ) && ($clave != "page" ) && ($clave != "max" ) && ($clave != "item" )) {
                         if ($valor) {
                             $eliminaCaracter = true;
                             if ($clave == "numero_documento" || $clave == "primer_nombre" || $clave == "primer_apellido")
@@ -312,25 +312,23 @@ class MatriculaController extends ControllerBase {
 
                 //Cramos el paginador
                 $paginador = new PHPPaging($modulo->thisdb());
-                $paginador->param = "&controlador=Usuario&accion=usuario".$parametros_busqueda;
+                $paginador->param = "&controlador=Usuario&accion=usuario" . $parametros_busqueda;
                 $paginador->rowCount($sql);
                 $paginador->config(3, 10);
 
-                $sql = $sql." LIMIT $paginador->start_row, $paginador->max_rows";
+                $sql = $sql . " LIMIT $paginador->start_row, $paginador->max_rows";
 
-                $consulta = $modulo->listarPaginador($sql);        
-                $arrayPaginador = array();        
-                while( $registro = $consulta->fetch(PDO::FETCH_ASSOC) )
-                {
-                        $arrayPaginador[] = $registro;            
+                $consulta = $modulo->listarPaginador($sql);
+                $arrayPaginador = array();
+                while ($registro = $consulta->fetch(PDO::FETCH_ASSOC)) {
+                    $arrayPaginador[] = $registro;
                 }
 
 
                 $vars['arrayPaginador'] = $arrayPaginador;
                 $vars['paginador'] = $paginador;
             }
-        }
-        else {
+        } else {
             $arrayRegistro = $Matricula->estructuraMatricula();
         }
 
@@ -417,6 +415,11 @@ class MatriculaController extends ControllerBase {
         }
 
 
+        if($arrayRegistro["categoria"]==null || $arrayRegistro["categoria"] =="")
+        {
+            $arrayRegistro["categoria"] = "Ninguna";                
+        }
+            
         $vars['anios'] = Resources::anio();
         $vars['arrayRegistro'] = $arrayRegistro;
         $vars['arrayPermiso'] = $arrayPermiso;
@@ -468,6 +471,93 @@ class MatriculaController extends ControllerBase {
         $crear_usuario = false;
         $crear_matricula = false;
 
+        
+        $curso = $Matricula->ejecutaSqlArray("SELECT * FROM curso WHERE id = '".$_POST["curso"]."'");
+        
+        //ABARBOSA
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["A"]="150000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["A"]="118000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["A"]="15000";
+                
+        $array_categoria["MATRICULA"]["PRIMARIA"]["A"]="220000";
+        $array_categoria["PENSION"]["PRIMARIA"]["A"]="118000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["A"]="15000";
+                
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["A"]="240000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["A"]="124000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["A"]="15000";
+                
+        $array_categoria["MATRICULA"]["MEDIA"]["A"]="265000";
+        $array_categoria["PENSION"]["MEDIA"]["A"]="198000";
+        $array_categoria["AGENDA"]["MEDIA"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["A"]="15000";
+        
+        //B        
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["B"]="100000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["B"]="118000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["B"]="15000";
+        
+        $array_categoria["MATRICULA"]["PRIMARIA"]["B"]="160000";
+        $array_categoria["PENSION"]["PRIMARIA"]["B"]="118000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["B"]="15000";
+        
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["B"]="170000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["B"]="124000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["B"]="15000";
+        
+        $array_categoria["MATRICULA"]["MEDIA"]["B"]="190000";
+        $array_categoria["PENSION"]["MEDIA"]["B"]="198000";
+        $array_categoria["AGENDA"]["MEDIA"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["B"]="15000";
+                
+        //C
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["C"]="90000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["C"]="118000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["C"]="15000";
+        
+        $array_categoria["MATRICULA"]["PRIMARIA"]["C"]="140000";
+        $array_categoria["PENSION"]["PRIMARIA"]["C"]="118000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["C"]="15000";
+        
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["C"]="155000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["C"]="124000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["C"]="15000";
+        
+        $array_categoria["MATRICULA"]["MEDIA"]["C"]="180000";
+        $array_categoria["PENSION"]["MEDIA"]["C"]="198000";
+        $array_categoria["AGENDA"]["MEDIA"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["C"]="15000";
+        
+        //D
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["D"]="80000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["D"]="115000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["D"]="15000";
+        
+        $array_categoria["MATRICULA"]["PRIMARIA"]["D"]="120000";
+        $array_categoria["PENSION"]["PRIMARIA"]["D"]="115000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["D"]="15000";
+        
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["D"]="140000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["D"]="115000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["D"]="15000";
+        
+        $array_categoria["MATRICULA"]["MEDIA"]["D"]="165000";
+        $array_categoria["PENSION"]["MEDIA"]["D"]="115000";
+        $array_categoria["AGENDA"]["MEDIA"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["D"]="15000";
+        
         //Variable estudiante que viene de importar los datos, confirma si creo usuario o solo lo asocio
         if (isset($arrayRegistro["estudiante"])) {
             if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
@@ -510,6 +600,15 @@ class MatriculaController extends ControllerBase {
                 $_POST["usuario_crear"] = $arrayDatosUser["id"];
                 $_POST["activo"] = 1;
                 $_POST["id"] = "";
+                
+                if($_POST["categoria"]!="Ninguna")
+                {
+                    $_POST["valor_matricula"]=$array_categoria["MATRICULA"][$curso["tipo"]][$_POST["categoria"]];                        
+                    $_POST["valor_pension"]=$array_categoria["PENSION"][$curso["tipo"]][$_POST["categoria"]];
+                    $_POST["valor_formulario"]=$array_categoria["FORMULARIO"][$curso["tipo"]][$_POST["categoria"]];
+                    $_POST["valor_agenda"]=$array_categoria["AGENDA"][$curso["tipo"]][$_POST["categoria"]];
+                }
+                
                 $id_matricula = $Matricula->newMatricula($_POST);
                 $arrayRegistro = $Matricula->consultMatricula($id_matricula);
                 $arrayRegistroUsuario = $Usuario->ejecutaSqlArray("SELECT usuario.*,ciudad.nombre as ciudad_nacimiento FROM usuario
@@ -517,11 +616,11 @@ class MatriculaController extends ControllerBase {
                                                                        WHERE usuario.id = '" . $_POST["estudiante"] . "'");
                 $arrayDocumentos = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["id"] . "'", "id DESC");
                 $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $id_matricula . "';");
-                
-                
+
+
                 $vars['alerta'] = 1;
                 $vars['accion'] = "editar";
                 $vars['accionDocumento'] = "nuevo";
@@ -536,7 +635,6 @@ class MatriculaController extends ControllerBase {
                 $arrayRegistro["fecha_nacimiento"] = $arrayRegistroUsuario["fecha_nacimiento"];
                 $arrayRegistro["rh"] = $arrayRegistroUsuario["rh"];
                 $arrayRegistro["usuario"] = $arrayRegistroUsuario["usuario"];
-
             } else {
                 $vars['error'] = $vars['error'] . "<br/>Se presento un error al crear el usuario y/o estudiante";
             }
@@ -579,6 +677,15 @@ class MatriculaController extends ControllerBase {
                 $id_usuario = $Usuario->newUsuario($_POST);
                 $_POST["estudiante"] = $id_usuario;
                 $_POST["activo"] = 1;
+                
+                if($_POST["categoria"]!="Ninguna")
+                {
+                    $_POST["valor_matricula"]=$array_categoria["MATRICULA"][$curso["tipo"]][$_POST["categoria"]];                        
+                    $_POST["valor_pension"]=$array_categoria["PENSION"][$curso["tipo"]][$_POST["categoria"]];
+                    $_POST["valor_formulario"]=$array_categoria["FORMULARIO"][$curso["tipo"]][$_POST["categoria"]];
+                    $_POST["valor_agenda"]=$array_categoria["AGENDA"][$curso["tipo"]][$_POST["categoria"]];
+                }
+                
                 $id_matricula = $Matricula->newMatricula($_POST);
                 $arrayRegistro = $Matricula->consultMatricula($id_matricula);
 
@@ -590,14 +697,14 @@ class MatriculaController extends ControllerBase {
 
 
 
-                $Usuario->ejecutaSql("INSERT INTO `usuario_perfil`(`perfil`, `usuario`) VALUES ('5','" . $id_usuario . "')");
+                $Usuario->ejecutaSql("INSERT INTO usuario_perfil(perfil, usuario) VALUES ('5','" . $id_usuario . "')");
                 $arrayDocumentos = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["id"] . "'", "id DESC");
                 $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $id_matricula . "';");
-                
-                
+
+
                 $vars['alerta'] = 1;
                 $vars['accion'] = "editar";
                 $vars['accionDocumento'] = "nuevo";
@@ -672,6 +779,93 @@ class MatriculaController extends ControllerBase {
         else
             $id = $_POST["id"];
 
+        
+        $curso = $Matricula->ejecutaSqlArray("SELECT * FROM curso WHERE id = '".$_POST["curso"]."'");
+        
+        //ABARBOSA
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["A"]="150000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["A"]="118000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["A"]="15000";
+                
+        $array_categoria["MATRICULA"]["PRIMARIA"]["A"]="220000";
+        $array_categoria["PENSION"]["PRIMARIA"]["A"]="118000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["A"]="15000";
+                
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["A"]="240000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["A"]="124000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["A"]="15000";
+                
+        $array_categoria["MATRICULA"]["MEDIA"]["A"]="265000";
+        $array_categoria["PENSION"]["MEDIA"]["A"]="198000";
+        $array_categoria["AGENDA"]["MEDIA"]["A"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["A"]="15000";
+        
+        //B        
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["B"]="100000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["B"]="118000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["B"]="15000";
+        
+        $array_categoria["MATRICULA"]["PRIMARIA"]["B"]="160000";
+        $array_categoria["PENSION"]["PRIMARIA"]["B"]="118000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["B"]="15000";
+        
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["B"]="170000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["B"]="124000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["B"]="15000";
+        
+        $array_categoria["MATRICULA"]["MEDIA"]["B"]="190000";
+        $array_categoria["PENSION"]["MEDIA"]["B"]="198000";
+        $array_categoria["AGENDA"]["MEDIA"]["B"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["B"]="15000";
+                
+        //C
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["C"]="90000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["C"]="118000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["C"]="15000";
+        
+        $array_categoria["MATRICULA"]["PRIMARIA"]["C"]="140000";
+        $array_categoria["PENSION"]["PRIMARIA"]["C"]="118000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["C"]="15000";
+        
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["C"]="155000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["C"]="124000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["C"]="15000";
+        
+        $array_categoria["MATRICULA"]["MEDIA"]["C"]="180000";
+        $array_categoria["PENSION"]["MEDIA"]["C"]="198000";
+        $array_categoria["AGENDA"]["MEDIA"]["C"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["C"]="15000";
+        
+        //D
+        $array_categoria["MATRICULA"]["PREESCOLAR"]["D"]="80000";
+        $array_categoria["PENSION"]["PREESCOLAR"]["D"]="115000";
+        $array_categoria["AGENDA"]["PREESCOLAR"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["PREESCOLAR"]["D"]="15000";
+        
+        $array_categoria["MATRICULA"]["PRIMARIA"]["D"]="120000";
+        $array_categoria["PENSION"]["PRIMARIA"]["D"]="115000";
+        $array_categoria["AGENDA"]["PRIMARIA"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["PRIMARIA"]["D"]="15000";
+        
+        $array_categoria["MATRICULA"]["BACHILLERATO"]["D"]="140000";
+        $array_categoria["PENSION"]["BACHILLERATO"]["D"]="115000";
+        $array_categoria["AGENDA"]["BACHILLERATO"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["BACHILLERATO"]["D"]="15000";
+        
+        $array_categoria["MATRICULA"]["MEDIA"]["D"]="165000";
+        $array_categoria["PENSION"]["MEDIA"]["D"]="115000";
+        $array_categoria["AGENDA"]["MEDIA"]["D"]="18000";
+        $array_categoria["FORMULARIO"]["MEDIA"]["D"]="15000";
+                       
         if ($Matricula->confirmMatricula($id)) {
             $arrayRegistro = $Matricula->consultMatricula($id);
             if (!isset($_GET["id"])) {
@@ -682,7 +876,27 @@ class MatriculaController extends ControllerBase {
                         if ($_POST["clave"] != "") {
                             $_POST["clave"] = sha1($_POST["clave"]);
                         }
+                        
+                        if($_POST["categoria"]!="Ninguna")
+                        {
+                            $_POST["valor_matricula"]=$array_categoria["MATRICULA"][$curso["tipo"]][$_POST["categoria"]];                        
+                            $_POST["valor_pension"]=$array_categoria["PENSION"][$curso["tipo"]][$_POST["categoria"]];
+                            $_POST["valor_formulario"]=$array_categoria["FORMULARIO"][$curso["tipo"]][$_POST["categoria"]];
+                            $_POST["valor_agenda"]=$array_categoria["AGENDA"][$curso["tipo"]][$_POST["categoria"]];
+                        }
                         $id = $Matricula->modMatricula($_POST);
+                                                
+                        $arrayUsuarioEdit=array();
+                        $arrayUsuarioEdit["id"] = $_POST["estudiante"];
+                        $arrayUsuarioEdit["primer_nombre"] = $_POST["primer_nombre"];
+                        $arrayUsuarioEdit["segundo_nombre"] = $_POST["segundo_nombre"];
+                        $arrayUsuarioEdit["primer_apellido"] = $_POST["primer_apellido"];
+                        $arrayUsuarioEdit["segundo_apellido"] = $_POST["segundo_apellido"];
+                        $arrayUsuarioEdit["genero"] = $_POST["genero"];
+                        $arrayUsuarioEdit["fecha_nacimiento"] = $_POST["fecha_nacimiento"];
+                        $arrayUsuarioEdit["rh"] = $_POST["rh"];
+                        $Usuario->modUsuario($arrayUsuarioEdit);
+                        
                         $arrayRegistro = $Matricula->consultMatricula($id);
                         $vars['alerta'] = 2;
                     } else {
@@ -713,11 +927,16 @@ class MatriculaController extends ControllerBase {
 
             $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $arrayRegistro["id"] . "'", "tipo");
             $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-            
-            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+
+            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
+            if($arrayRegistro["categoria"]==null || $arrayRegistro["categoria"] =="")
+            {
+                $arrayRegistro["categoria"] = "Ninguna";                
+            }
+            
             $vars['anios'] = Resources::anio();
             $vars['arrayRegistro'] = $arrayRegistro;
             $vars['arrayPermiso'] = $arrayPermiso;
@@ -809,8 +1028,8 @@ class MatriculaController extends ControllerBase {
 
             $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $arrayRegistro["id"] . "'", "tipo");
             $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-            
-            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+
+            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -833,7 +1052,7 @@ class MatriculaController extends ControllerBase {
             $formXhtml->location("index.php?controlador=Matricula&accion=matricula");
         }
     }
-    
+
     public function nuevoDocumentoCertificado() {
         //Incluye el modelo que corresponde
         require $this->modelo;
@@ -909,7 +1128,7 @@ class MatriculaController extends ControllerBase {
             $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $arrayRegistro["id"] . "'", "tipo");
             $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
 
-            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -1003,7 +1222,7 @@ class MatriculaController extends ControllerBase {
                 $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $_GET["id"] . "'", "tipo");
                 $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
 
-                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -1069,7 +1288,7 @@ class MatriculaController extends ControllerBase {
             $vars = array();
 
             if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
-                $Matricula->ejecutaSql("DELETE FROM `boletines`.`acudiente` WHERE `usuario`='" . $_GET["idd"] . "' and`matricula`='" . $_GET["id"] . "';");
+                $Matricula->ejecutaSql("DELETE FROM acudiente WHERE usuario='" . $_GET["idd"] . "' andmatricula='" . $_GET["id"] . "';");
                 $vars['alerta'] = 2;
             } else {
                 $vars['error'] = "No tienen permisos para ingresar ingresar información, Comunicarse con el administrador del sistema";
@@ -1095,7 +1314,7 @@ class MatriculaController extends ControllerBase {
             $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $_GET["id"] . "'", "tipo");
             $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
 
-            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -1189,7 +1408,7 @@ class MatriculaController extends ControllerBase {
 
                 $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $_GET["id"] . "'", "tipo");
                 $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+                $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -1262,8 +1481,8 @@ class MatriculaController extends ControllerBase {
                     $vars['alerta'] = 1;
                     $vars['accion'] = "editar";
                     $vars['accionDocumento'] = "nuevo";
-                    $Usuario->ejecutaSql("INSERT INTO `usuario_perfil`(`perfil`, `usuario`) VALUES ('6','" . $id . "')");
-                    $Usuario->ejecutaSql("INSERT INTO `acudiente`(`matricula`, `usuario`, `parentesco`) VALUES ('" . $_GET["id"] . "','" . $id . "','" . $_POST["parentesco"] . "')");
+                    $Usuario->ejecutaSql("INSERT INTO usuario_perfil(perfil, usuario) VALUES ('6','" . $id . "')");
+                    $Usuario->ejecutaSql("INSERT INTO acudiente(matricula, usuario, parentesco) VALUES ('" . $_GET["id"] . "','" . $id . "','" . $_POST["parentesco"] . "')");
                     $vars['arrayRegistroAcudiente'] = $Usuario->estructuraUsuario();
                 } else {
                     $vars['error'] = "El campo (usuario) que intenta ingresar ya se encuentra en la base de datos de acudientes";
@@ -1287,11 +1506,11 @@ class MatriculaController extends ControllerBase {
         }
 
         $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $_GET["id"] . "'", "tipo");
-        
+
         $arrayRegistro = $Matricula->consultMatricula($_GET["id"]);
 
         $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-        
+
         $vars['estudiante'] = $arrayRegistro["estudiante"];
 
         $arrayRegistroUsuario = $Usuario->ejecutaSqlArray("SELECT usuario.*,ciudad.nombre as ciudad_nacimiento FROM usuario
@@ -1311,7 +1530,7 @@ class MatriculaController extends ControllerBase {
         /* ME QUEDE EN EL BUSCADOR DE LOS ACUDIENTES, FALTA CARGAR BARRIOS Y CIUDADES */
 
 
-        $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+        $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -1359,97 +1578,77 @@ class MatriculaController extends ControllerBase {
                 $arrayPermiso[] = $valor["permiso"];
             }
         }
-        
-        if($_GET["numero_documento"]!=""||$_GET["primer_nombre"]!=""||$_GET["primer_apellido"]!="")
-        {
-            
-            if($_GET["numero_documento"]!="")
-            {
-                $a1="usuario.numero_documento LIKE '%" . $_GET["numero_documento"] . "%' OR ";
+
+        if ($_GET["numero_documento"] != "" || $_GET["primer_nombre"] != "" || $_GET["primer_apellido"] != "") {
+
+            if ($_GET["numero_documento"] != "") {
+                $a1 = $a1 . " usuario.numero_documento LIKE '%" . $_GET["numero_documento"] . "%' AND ";
+            }
+
+            if ($_GET["primer_nombre"] != "") {
+                $a1 = $a1 . " usuario.primer_nombre LIKE '%" . $_GET["primer_nombre"] . "%' AND ";
+            }
+
+            if ($_GET["primer_apellido"] != "") {
+                $a1 = $a1 . " usuario.primer_apellido LIKE '%" . $_GET["primer_apellido"] . "%' AND ";
             }
             
-            if($_GET["primer_nombre"]!="")
-            {
-                $a2="usuario.primer_nombre LIKE '%" . $_GET["primer_nombre"] . "%' OR ";
-            }
-            
-            if($_GET["primer_apellido"]!="")
-            {
-                $a3="usuario.primer_apellido LIKE '%" . $_GET["primer_apellido"] . "%' OR ";
-            }
-            
-            
-        
-        $arrayAcudientes = $Matricula->listMatriculaSql("SELECT 
-                                                            usuario.* 
-                                                        FROM 
-                                                            usuario             
-                                                        WHERE 
-                                                            $a1
-                                                            $a2    
-                                                            $a3    
-                                                            usuario.id = '-1'
-                                                        ;");
-        
-        
-        
-            
-            
-        ?>
-        <div class="box-header with-border">
-            <h3 class="box-title">Resultado de la busqueda de acudientes</h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th>Numero de Documento</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Telefono - Celular</th>
-                        <th>Ubicacion</th>
-                        <th>Asignar</th>
-                    </tr>
-                    <?php
-                    foreach ($arrayAcudientes as $clave => $item) {
-                        ?>
+            $sql = "SELECT usuario.* FROM usuario WHERE $a1 usuario.activo = '1'                                                        ;";
+
+            $arrayAcudientes = $Matricula->listMatriculaSql($sql);
+
+            ?>
+            <div class="box-header with-border">
+                <h3 class="box-title">Resultado de la busqueda de acudientes</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tbody>
                         <tr>
-                            <td><?php echo $item['numero_documento']; ?></td>
-                            <td><?php echo $item['primer_nombre'] . " " . $item['segundo_nombre']; ?></td>
-                            <td><?php echo $item['primer_apellido'] . " " . $item['segundo_apellido']; ?></td>
-                            <td><?php echo $item['telefono'] . " - " . $item['celular']; ?></td>
-                            <td><?php echo $item['ubicacion']; ?></td>
-                            <td>
-                                <button title="<?php echo $item['id']; ?>" dir="<?php echo $_GET["id"]; ?>" data-toggle="modal" data-target="#asignar_acudiente" class="btn_acudiente btn" type="button"><i class="fa fa-user-plus"></i></button>
-                            </td>
+                            <th>Numero de Documento</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Telefono - Celular</th>
+                            <th>Ubicacion</th>
+                            <th>Asignar</th>
                         </tr>
                         <?php
-                    }
-                    ?>
-                </tbody>    
-            </table>
-        </div>
-        <?php
+                        foreach ($arrayAcudientes as $clave => $item) {
+                            ?>
+                            <tr>
+                                <td><?php echo $item['numero_documento']; ?></td>
+                                <td><?php echo $item['primer_nombre'] . " " . $item['segundo_nombre']; ?></td>
+                                <td><?php echo $item['primer_apellido'] . " " . $item['segundo_apellido']; ?></td>
+                                <td><?php echo $item['telefono'] . " - " . $item['celular']; ?></td>
+                                <td><?php echo $item['ubicacion']; ?></td>
+                                <td>
+                                    <button title="<?php echo $item['id']; ?>" dir="<?php echo $_GET["id"]; ?>" data-toggle="modal" data-target="#asignar_acudiente" class="btn_acudiente btn" type="button"><i class="fa fa-user-plus"></i></button>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                    </tbody>    
+                </table>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="box-header with-border">
+                <h3 class="box-title">No hay resultados, en la base de datos de acudientes</h3>
+            </div>
+            <?php
         }
-        else
-        {
-        ?>
-        <div class="box-header with-border">
-            <h3 class="box-title">No hay resultados, en la base de datos de acudientes</h3>
-        </div>
-        <?php
-        }                
-       
     }
-    
+
     public function asignarAcudiente() {
         //Incluye el modelo que corresponde
         require $this->modelo;
         require "models/DocumentoModel.php";
         require "models/ModuloModel.php";
         require "models/UsuarioModel.php";
-        
+
         //Creamos una instancia de nuestro "modelo"
         $Matricula = new MatriculaModel();
         $documento = new DocumentoModel();
@@ -1482,7 +1681,7 @@ class MatriculaController extends ControllerBase {
             $vars = array();
 
             if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
-                $Usuario->ejecutaSql("INSERT INTO `acudiente`(`matricula`, `usuario`, `parentesco`) VALUES ('" . $_GET["id"] . "','" . $_GET["ida"] . "','" . $_GET["p"] . "')");
+                $Usuario->ejecutaSql("INSERT INTO acudiente(matricula, usuario, parentesco) VALUES ('" . $_GET["id"] . "','" . $_GET["ida"] . "','" . $_GET["p"] . "')");
                 $vars['alerta'] = 2;
             } else {
                 $vars['error'] = "No tienen permisos para ingresar ingresar información, Comunicarse con el administrador del sistema";
@@ -1507,9 +1706,9 @@ class MatriculaController extends ControllerBase {
 
             $arrayDocumentos = $documento->listDocumento("WHERE matricula='" . $_GET["id"] . "'", "tipo");
             $arrayDocumentosCertificados = $documento->listDocumento("WHERE usuario='" . $arrayRegistro["estudiante"] . "'", "tipo");
-        
 
-            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM boletines.acudiente
+
+            $arrayAcudientes = $Matricula->listMatriculaSql("SELECT usuario.*,acudiente.parentesco FROM acudiente
                                                             INNER JOIN usuario ON usuario.id=acudiente.usuario
                                                             WHERE acudiente.matricula = '" . $arrayRegistro["id"] . "';");
 
@@ -1532,7 +1731,6 @@ class MatriculaController extends ControllerBase {
             $formXhtml->location("index.php?controlador=Matricula&accion=matricula");
         }
     }
-    
 
 }
 ?>
