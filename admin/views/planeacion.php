@@ -104,7 +104,14 @@ $titulo = "Planeacion";
                                                 <label class="col-sm-2 control-label" for="meta">Meta De Compresión </label>
                                                 <div class="col-sm-10">
                                                     <select id="meta" name="meta" class="validar form-control meta" title="Metas De Compresión">
-                                                        <option>::Seleccionar::</option>
+                                                        <option value="">::Seleccionar::</option>
+                                                        <?php
+                                                        if(isset($vars["arrayMeta"])){
+                                                        ?>
+                                                        <option selected="selected" value="<?php echo $vars["arrayMeta"]["id"];?>"><?php echo $vars["arrayMeta"]["nombre"];?></option>
+                                                        <?php
+                                                        }                                                            
+                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -112,7 +119,14 @@ $titulo = "Planeacion";
                                                 <label class="col-sm-2 control-label" for="desempeno"> Desempeño De Comprensión</label>
                                                 <div class="col-sm-10">
                                                     <select id="desempeno" name="desempeno" class="validar form-control desempeno" title=" Desempeño De Comprensión">
-                                                        <option>::Seleccionar::</option>
+                                                        <option value="">::Seleccionar::</option>
+                                                        <?php
+                                                        if(isset($vars["arrayDesempeno"])){
+                                                        ?>
+                                                        <option selected="selected" value="<?php echo $vars["arrayDesempeno"]["id"];?>"><?php echo $vars["arrayDesempeno"]["nombre_desempeno"];?></option>
+                                                        <?php
+                                                        }                                                            
+                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -120,36 +134,37 @@ $titulo = "Planeacion";
                                                 <label class="col-sm-2 control-label" for="valoracion">Valoraciónes Continuas</label>
                                                 <div class="col-sm-10">
                                                     <select id="valoracion" name="valoracion" class="validar form-control" title="Valoraciónes Continuas">
-                                                        <option>::Seleccionar::</option>
+                                                        <option value="">::Seleccionar::</option>
+                                                        <?php
+                                                        if(isset($vars["arrayValoracion"])){
+                                                        ?>
+                                                        <option selected="selected" value="<?php echo $vars["arrayValoracion"]["id"];?>"><?php echo $vars["arrayValoracion"]["nombre_valoracion"];?></option>
+                                                        <?php
+                                                        }                                                            
+                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label" for="inficador">Indicador De Valoración Continua:</label>
-                                                <div class="col-sm-10">
-                                                    <?php $vars["formXhtml"]->radio("inficador", "inficador", $vars["arrayRegistro"]["inficador"], "", "Indicador De Valoración Continua", "", array("Tareas" => "Tareas" ,"Cuaderno" => "Cuaderno" ,"Participación" => "Participación" ,"Trabajo Individual" => "Trabajo Individual" ,"Trabajo Grupal" => "Trabajo Grupal" ,"Talleres" => "Talleres" ,"Evaluación" => "Evaluación" ,"Exposición" => "Exposición" ,"Autoevaluación" => "Autoevaluación")); ?>
+                                                <label class="col-sm-2 control-label" for="indicador">Indicador De Valoración Continua:</label>
+                                                <div class="col-sm-10">                                                    
+                                                    <?php $vars["formXhtml"]->select("indicador", "indicador", $vars["arrayRegistro"]["indicador"], "validar form-control", "Indicador De Valoración Continua", "", "", "", "", "", "", "",array("Tarea" => "Tarea" ,"Cuaderno" => "Cuaderno" ,"Participación" => "Participación" ,"Trabajo Individual" => "Trabajo Individual" ,"Trabajo Grupal" => "Trabajo Grupal" ,"Talleres" => "Talleres" ,"Evaluación" => "Evaluación" ,"Exposición" => "Exposición" ,"Autoevaluación" => "Autoevaluación")); ?>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label" for="descripcion">Descriptor De Valoración Continua</label>
                                                 <div class="col-sm-10">
-                                                    <?php $vars["formXhtml"]->textarea("descripcion", "descripcion", $vars["arrayRegistro"]["descripcion"], "form-control", "Descriptor De Valoración Continua");?>
+                                                    <?php $vars["formXhtml"]->textarea("descripcion", "descripcion", $vars["arrayRegistro"]["descripcion"], "validar form-control", "Descriptor De Valoración Continua");?>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label" for="fecha_inicio">Fecha Evaluación</label>
+                                                <label class="col-sm-2 control-label" for="fecha_evaluacion">Fecha Evaluación</label>
                                                 <div class="col-sm-10">
                                                     <?php
-                                                        $vars["formXhtml"]->inputtext("text", "fecha_inicio", "fecha_inicio", $vars["arrayRegistro"]["fecha_nacimiento"], "validar form-control calendario", "Fecha Evaluación", "", "", "", "", "", "", true);                                                    
+                                                        $vars["formXhtml"]->inputtext("text", "fecha_evaluacion", "fecha_evaluacion", $vars["arrayRegistro"]["fecha_evaluacion"], "validar form-control calendario", "Fecha Evaluación", "", "", "", "", "", "", true);                                                    
                                                     ?>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label" for="activar">Activar?</label>
-                                                <div class="col-sm-10">
-                                                    <?php $vars["formXhtml"]->radio("activo", "activo", $vars["arrayRegistro"]["activo"], "", "Activar?", "", array("1" => "Si", "0" => "No")); ?>
-                                                </div>
-                                            </div>                                                                                       
+                                            </div>                                                                                                                                   
                                         </div><!-- /.box-body -->
 
                                         <!-- /.box-body -->
@@ -200,9 +215,13 @@ $titulo = "Planeacion";
                                         <table class="table table-bordered">
                                             <tbody>
                                                 <tr>
-                                                    <th>Tipo</th>
-                                                    <th>Nombre</th>
-                                                    <th>Orden</th>
+                                                    <th>Plan de Estudio</th>
+                                                    <th>Meta De Compresión</th>
+                                                    <th>Desempeño De Comprensión</th>
+                                                    <th>Valoraciónes Continuas</th>
+                                                    <th>Indicador De Valoración Continua</th>
+                                                    <th>Descriptor De Valoración Continua</th>
+                                                    <th>Fecha Evaluación</th>
                                                     <th>Activo</th>
                                                     <th>Editar</th>
                                                 </tr>
@@ -210,9 +229,13 @@ $titulo = "Planeacion";
                                                 foreach($vars["arrayPaginador"] as $item) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $item['tipo']; ?></td>
-                                                        <td><?php echo $item['nombre']; ?></td>
-                                                        <td><?php echo $item['orden']; ?></td>
+                                                        <td><?php echo $item['anio']." - ".$item['curso_nombre']." - Periodo ".$item['periodo']." - ".$item['asignatura']; ?></td>
+                                                        <td><?php echo $item['meta']; ?></td>
+                                                        <td><?php echo $item['nombre_desempeno']; ?></td>
+                                                        <td><?php echo $item['nombre_valoracion']; ?></td>
+                                                        <td><?php echo $item['indicador']; ?></td>
+                                                        <td><?php echo $item['descripcion']; ?></td>
+                                                        <td><?php echo $item['fecha_evaluacion']; ?></td>
                                                         <td>
                                                             <?php
                                                             if ($item["activo"]) {

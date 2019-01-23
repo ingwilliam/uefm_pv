@@ -170,7 +170,7 @@ class PlaneacionModel extends ModelBase {
         return $array;
     }
     
-    public function listArraySql( $sql , $key , $consecutivo = false) {
+    public function listArraySql( $sql , $key , $consecutivo = false) {        
         return $this->db->listArraySql($sql , $key , $consecutivo);
     }
     

@@ -4,7 +4,7 @@ class PlaneacionController extends ControllerBase {
 
     private $url = "planeacion.php";
     private $modelo = "models/PlaneacionModel.php";
-    private $table = "curso";
+    private $table = "planeacion";
     private $id = "id";
     private $pagina = "planeacion";
 
@@ -82,13 +82,20 @@ class PlaneacionController extends ControllerBase {
         }
         
         //Consulta sql del modulo
-        $sql = "SELECT $this->table.* FROM $this->table";
+        $sql = "SELECT v.nombre_valoracion,pe.periodo,pe.anio,m.nombre AS meta,d.nombre_desempeno,a.nombre AS asignatura,c.nombre AS curso_nombre,p.* FROM $this->table AS p
+                INNER JOIN plan_estudio AS pe ON pe.id = p.plan_estudio
+                INNER JOIN meta AS m ON m.id = p.meta
+                INNER JOIN desempeno AS d ON d.id = p.desempeno
+                INNER JOIN asignatura AS a ON a.id = pe.asignatura
+                INNER JOIN curso AS c ON c.id = p.curso
+                INNER JOIN valoracion AS v ON v.id = p.valoracion
+                ";
         //Se une los sql con las posibles concatenaciones
-        $sql = $sql . $busqueda . " ORDER BY $this->table.orden";
+        $sql = $sql . $busqueda . " ORDER BY p.fecha_evaluacion";
 
         //creamos el objeto para el generador de etiquetas
         $formXhtml = new Xhtml();
-
+        
         //Cramos el paginador
         $paginador = new PHPPaging($modulo->thisdb());
         $paginador->param = "&controlador=Planeacion&accion=planeacion".$parametros_busqueda;
@@ -162,9 +169,15 @@ class PlaneacionController extends ControllerBase {
         //Incluye el modelo que corresponde
         require $this->modelo;
         require "models/ModuloModel.php";
-
+        require "models/MetaModel.php";
+        require "models/DesempenoModel.php";
+        require "models/ValoracionModel.php";
+        
         //Creamos una instancia de nuestro "modelo"
         $Planeacion = new PlaneacionModel();
+        $Meta = new MetaModel();
+        $Desempeno = new DesempenoModel();
+        $Valoracion = new ValoracionModel();
         $modulo = new ModuloModel();
 
         //incluimos las variables globales del config
@@ -192,12 +205,27 @@ class PlaneacionController extends ControllerBase {
         $vars = array();
                
         if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
+            $array_ids = explode("-", $_POST["plan_estudio"]);
+            $_POST["plan_estudio"] = $array_ids[0];
+            $_POST["curso"] = $array_ids[1];
             $_POST["fecha_crear"] = date("Y-m-d H:i:s");
-            $_POST["usuario_crear"] = $arrayDatosUser["id"];        
+            $_POST["usuario_crear"] = $arrayDatosUser["id"];
+            $_POST["activo"] = 1;            
             $id = $Planeacion->newPlaneacion($_POST);
             $arrayRegistro = $Planeacion->consultPlaneacion($id);
+            $arrayRegistro["plan_estudio"]=$arrayRegistro["plan_estudio"]."-".$arrayRegistro["curso"];
             $vars['alerta'] = 1;
             $vars['accion'] = "editar";
+            
+            $arrayMeta = $Meta->consultMeta($arrayRegistro["meta"]);
+            $arrayDesempeno = $Desempeno->consultDesempeno($arrayRegistro["desempeno"]);
+            $arrayValoracion = $Valoracion->consultValoracion($arrayRegistro["valoracion"]);
+            
+            $vars['arrayMeta'] = $arrayMeta;
+            $vars['arrayDesempeno'] = $arrayDesempeno;
+            $vars['arrayValoracion'] = $arrayValoracion;
+
+            
         } else {
             $vars['error'] = "No tienen permisos para ingresar ingresar información, Comunicarse con el administrador del sistema";
             $vars['alerta'] = 3;
@@ -219,9 +247,15 @@ class PlaneacionController extends ControllerBase {
         //Incluye el modelo que corresponde
         require $this->modelo;
         require "models/ModuloModel.php";
+        require "models/MetaModel.php";
+        require "models/DesempenoModel.php";
+        require "models/ValoracionModel.php";
         
         //Creamos una instancia de nuestro "modelo"
         $Planeacion = new PlaneacionModel();
+        $Meta = new MetaModel();
+        $Desempeno = new DesempenoModel();
+        $Valoracion = new ValoracionModel();
         $modulo = new ModuloModel();
 
         //incluimos las variables globales del config
@@ -253,13 +287,22 @@ class PlaneacionController extends ControllerBase {
 
         if ($Planeacion->confirmPlaneacion($id)) {            
             $arrayRegistro = $Planeacion->consultPlaneacion($id);
+            $arrayRegistro["plan_estudio"]=$arrayRegistro["plan_estudio"]."-".$arrayRegistro["curso"];                        
+            $arrayMeta = $Meta->consultMeta($arrayRegistro["meta"]);
+            $arrayDesempeno = $Desempeno->consultDesempeno($arrayRegistro["desempeno"]);
+            $arrayValoracion = $Valoracion->consultValoracion($arrayRegistro["valoracion"]);
+            
             if (!isset($_GET["id"]))
             {
                 if (in_array("1", $arrayPermiso)==true||in_array("2", $arrayPermiso)==true) {
+                    $array_ids = explode("-", $_POST["plan_estudio"]);
+                    $_POST["plan_estudio"] = $array_ids[0];
+                    $_POST["curso"] = $array_ids[1];                    
                     $_POST["fecha_editar"] = date("Y-m-d H:i:s");
                     $_POST["usuario_editar"] = $arrayDatosUser["id"];
                     $Planeacion->modPlaneacion($_POST);                
                     $arrayRegistro = $Planeacion->consultPlaneacion($id);
+                    $arrayRegistro["plan_estudio"]=$arrayRegistro["plan_estudio"]."-".$arrayRegistro["curso"];                    
                     $vars['alerta'] = 2;
                 }
                 else
@@ -268,7 +311,11 @@ class PlaneacionController extends ControllerBase {
                     $vars['alerta'] = 3;
                 }
             }
-                        
+            
+            $vars['arrayMeta'] = $arrayMeta;
+            $vars['arrayDesempeno'] = $arrayDesempeno;
+            $vars['arrayValoracion'] = $arrayValoracion;
+            
             $vars['arrayRegistro'] = $arrayRegistro;
             $vars['arrayPermiso'] = $arrayPermiso;
             $vars['URLROOT'] = $config->get('URLROOT');
@@ -318,7 +365,7 @@ class PlaneacionController extends ControllerBase {
         $vars = array();
                
         if (in_array("1", $arrayPermiso) == true || in_array("2", $arrayPermiso) == true) {
-            $sql="SELECT
+            echo $sql="SELECT
                     *
                   FROM meta 
                   WHERE plan_estudio = '".$_POST["id"]."' AND activo=1

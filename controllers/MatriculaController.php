@@ -134,6 +134,8 @@ class MatriculaController {
         require 'models/MatriculaModel.php';
         require 'models/UsuarioModel.php';
 
+        echo "<pre>";
+        print_r($_POST);
         
         //Creamos una instancia de nuestro "modelo"
         $indexModel = new IndexModel();
@@ -141,13 +143,13 @@ class MatriculaController {
         $usuarioModel = new UsuarioModel();
 
         $formXhtml = new Xhtml();
+        //VERIFICO QUE LA MATRICULA DEL ESTUDIANTE SEA UNICA PARA EL AÑO ACTUAL
         if ($matriculaModel->confirmMatriculaWhere("anio = '" . $_POST["anio"] . "' AND numero_documento = '" . $_POST["numero_documento"] . "' AND tipo_documento = '" . $_POST["tipo_documento"] . "'")) {
             $anio = date("Y");
             $formXhtml->alert("Los campos de identificacion (Año, Tipo de documento y Numero de documento) ya se encuentra en la base de datos, este estudiante ya esta matriculado para este año (" . $anio . ")");
             $formXhtml->location("index.php?controlador=Matricula&accion=matricula");
             exit;
-        } else {
-            
+        } else {            
             //VERIFICO USUARIO SI EXISTE PARA CREAR O ASOCIAR A LA NUEVA MATRICULA
             if (!$usuarioModel->confirmEstudiante($_POST["estudiante"])) {
                 if (!$usuarioModel->confirmUsuarioWhere("numero_documento = '" . $_POST["numero_documento"] . "' AND tipo_documento = '" . $_POST["tipo_documento"] . "'")) {
@@ -163,29 +165,30 @@ class MatriculaController {
                     //CREO EL PERFIL DE CADA USUARIO
                     $usuarioModel->ejecutaSql("INSERT INTO usuario_perfil(perfil, usuario) VALUES ('5','" . $_POST["estudiante"] . "')");
                     
-                } else {
+                } 
+                /*
+                else {
                     $formXhtml->alert("Los campos de identificacion (Tipo de documento y Numero de documento) ya se encuentra en la base de datos");            
                     $formXhtml->location("index.php?controlador=Matricula&accion=verificar&numero_documento=".$_POST["numero_documento"]."&tipo_documento=".$_POST["tipo_documento"]."&anio=".$_POST["anio"]);
                     exit;
-                }
+                }                 
+                */
             }
             else
             {
-                if (!$usuarioModel->confirmUsuarioWhere("numero_documento = '" . $_POST["numero_documento"] . "' AND tipo_documento = '" . $_POST["tipo_documento"] . "' AND id<>'" . $_POST["estudiante"] . "'")) 
-                {           
-                            $id=$_POST["id"];
-                            
-                            $_POST["fecha_editar"] = date("Y-m-d H:i:s");
-                            $_POST["usuario_editar"] = 1;
-                            $_POST["id"] = $_POST["estudiante"];
-                            
-                            $usuarioModel->modUsuario($_POST);
-                            $_POST["id"] = $id;
-                } else {
+                //if (!$usuarioModel->confirmUsuarioWhere("numero_documento = '" . $_POST["numero_documento"] . "' AND tipo_documento = '" . $_POST["tipo_documento"] . "' AND id<>'" . $_POST["estudiante"] . "'")) 
+                //{           
+                $id=$_POST["id"];                            
+                $_POST["fecha_editar"] = date("Y-m-d H:i:s");
+                $_POST["usuario_editar"] = 1;
+                $_POST["id"] = $_POST["estudiante"];                            
+                $usuarioModel->modUsuario($_POST);
+                $_POST["id"] = $id;
+                /*} else {
                     $formXhtml->alert("Los campos de identificacion (Tipo de documento y Numero de documento) ya se encuentra en la base de datos");            
                     $formXhtml->location("index.php?controlador=Matricula&accion=verificar&numero_documento=".$_POST["numero_documento"]."&tipo_documento=".$_POST["tipo_documento"]."&anio=".$_POST["anio"]);
                     exit;                    
-                }
+                }*/
             }
             
             //CREO LA MATRICULA DEL AÑO ACTUAL

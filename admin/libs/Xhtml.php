@@ -158,6 +158,19 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
             <?php            
         }
     }
+    
+    public function check($id, $name, $value, $class, $title, $style = "", $arrayradio = array(),$disable="") {
+
+        foreach ($arrayradio as $clave => $valor) {
+            if ($clave == $value)
+                $check = "checked=\"checked\"";
+            else
+                $check = "";
+            ?>
+            <input type="checkbox" id="<?php echo $id; ?>" name="<?php echo $name; ?>[]" class="<?php echo $class; ?>" title="<?php echo $title; ?>" style="<?php echo $style; ?>" value="<?php echo $clave; ?>" <?php echo $check; ?> <?php echo $disable; ?> /><?php echo $valor; ?> &nbsp;
+            <?php            
+        }
+    }
 
     public function select($id, $name, $value, $class, $title, $style = "", $table = "", $key = "", $muestra = "", $extra = "", $where = "1", $orderby = "", $arrayselect = array(), $dir = "", $textoSelect = ":: Seleccione ::", $disable = "") {
 
@@ -165,18 +178,21 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
 
             if ($table == "plan_estudio") {
                 $sql="SELECT
-                        pe.id,
-                        pe.anio, 
-                        a.nombre as asignatura,
-                        c.nombre as curso,
-                        c.orden
-                      FROM plan_estudio AS pe
-                      INNER JOIN asignatura AS a ON pe.asignatura = a.id
-                      INNER JOIN plan_estudio_curso AS pec ON pe.id = pec.plan_estudio
-                      INNER JOIN curso AS c ON pec.curso = c.id
-                      ORDER BY 2,3,5
+                                pe.anio, 
+                                c.orden,
+                                pe.periodo,
+                                a.nombre as asignatura,
+                                pe.id,
+                                c.id AS id_curso,
+                                c.nombre as curso                                                
+                        FROM plan_estudio AS pe
+                                INNER JOIN asignatura AS a ON pe.asignatura = a.id
+                                INNER JOIN plan_estudio_curso AS pec ON pe.id = pec.plan_estudio
+                                INNER JOIN curso AS c ON pec.curso = c.id
+                        ORDER BY 1,2,3,4
                       ";
-                $arrayselect = $this->listArraySql($sql, "id");
+                $arrayselect = $this->listArraySql($sql, "id" ,true);
+                                
             }
             else
             {
@@ -189,8 +205,14 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
             <?php
             $check = "";
             foreach ($arrayselect as $clave => $valor) {
+                
+                if ($table == "plan_estudio") {
+                    $clave = $valor["id"]."-".$valor["id_curso"];
+                }
+                
                 if(is_array($value))
                 {
+                    echo "aaa";
                     if (in_array($clave, $value))
                         $check = "selected=\"selected\"";
                     else
@@ -202,13 +224,14 @@ Si lo has deshabilitado intencionadamente, por favor vuelve a activarlo.</p>
                         $check = "selected=\"selected\"";
                     else
                         $check = "";   
-                }                                
+                }  
+                
                 ?>
                 <option value="<?php echo $clave; ?>" <?php echo $check; ?>>
                     <?php
                     if ($table != "") {
                         if ($table == "plan_estudio") {
-                            echo $valor["anio"]."-".$valor["asignatura"]."-".$valor["curso"];
+                            echo $valor["anio"]." - ".$valor["curso"]." - Periodo ".$valor["periodo"]." - ".$valor["asignatura"];
                         }
                         else
                         {
